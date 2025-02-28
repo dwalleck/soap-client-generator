@@ -284,6 +284,13 @@ internal static class ClientTemplate
         {
             string propertyType = property.Value.Type;
             bool isRequired = property.Value.IsRequired;
+            string propertyName = property.Key;
+
+            // Check if property name is a C# keyword
+            if (IsCSharpKeyword(propertyName))
+            {
+                propertyName = "@" + propertyName;
+            }
 
             // Make non-required properties nullable if they're value types
             if (!isRequired && !propertyType.EndsWith("?") && !propertyType.StartsWith("List<") &&
@@ -313,7 +320,7 @@ internal static class ClientTemplate
                 sb.AppendLine($"        [XmlElement(ElementName = \"{property.Key}\")]");
             }
 
-            sb.AppendLine($"        public {propertyType} {property.Key} {{ get; set; }}");
+            sb.AppendLine($"        public {propertyType} {propertyName} {{ get; set; }}");
             sb.AppendLine();
         }
 
@@ -322,6 +329,30 @@ internal static class ClientTemplate
         sb.AppendLine("}");
 
         return sb.ToString();
+    }
+
+    /// <summary>
+    /// Checks if a string is a C# keyword
+    /// </summary>
+    /// <param name="word">The word to check</param>
+    /// <returns>True if the word is a C# keyword, false otherwise</returns>
+    private static bool IsCSharpKeyword(string word)
+    {
+        // List of C# keywords
+        var keywords = new HashSet<string>
+        {
+            "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked",
+            "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else",
+            "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for",
+            "foreach", "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock",
+            "long", "namespace", "new", "null", "object", "operator", "out", "override", "params",
+            "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed",
+            "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw",
+            "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using",
+            "virtual", "void", "volatile", "while"
+        };
+
+        return keywords.Contains(word);
     }
 
     /// <summary>

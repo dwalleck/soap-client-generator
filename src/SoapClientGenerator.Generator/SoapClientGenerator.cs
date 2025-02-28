@@ -181,14 +181,39 @@ EndGlobal
         string dataContractsDir = Path.Combine(outputDirectory, "DataContracts");
         Directory.CreateDirectory(dataContractsDir);
 
+        // Build a dictionary of array types for reference
+        var arrayTypes = wsdl.Types
+            .Where(t => t.IsArrayType && t.ArrayItemType != null)
+            .ToDictionary(t => t.Name, t => t.ArrayItemType!);
+
         foreach (var type in wsdl.Types)
         {
+            // Skip generating classes for array types
+            if (type.IsArrayType)
+            {
+                continue;
+            }
+
             if (type.Kind == WsdlTypeKind.Complex)
             {
                 // Generate a class for each complex type
                 var properties = type.Properties.ToDictionary(
                     p => p.Name,
-                    p => (Type: MapWsdlTypeToClrType(p.Type, p.IsCollection), IsRequired: p.IsRequired)
+                    p =>
+                    {
+                        // Check if the property type is an array type
+                        string propertyType = p.Type;
+                        if (GetLocalName(propertyType) is string localName && arrayTypes.TryGetValue(localName, out var itemType))
+                        {
+                            // If it's an array type, use List<ItemType> directly
+                            return (Type: $"List<{MapWsdlTypeToClrType(itemType, false)}>", IsRequired: p.IsRequired);
+                        }
+                        else
+                        {
+                            // Otherwise, use the normal mapping
+                            return (Type: MapWsdlTypeToClrType(p.Type, p.IsCollection), IsRequired: p.IsRequired);
+                        }
+                    }
                 );
 
                 string classCode = ClientTemplate.GenerateDataContract(_options, type.Name, properties);
@@ -203,6 +228,20 @@ EndGlobal
                 await File.WriteAllTextAsync(filePath, enumCode);
             }
         }
+    }
+
+    private string? GetLocalName(string qualifiedName)
+    {
+        if (string.IsNullOrEmpty(qualifiedName))
+            return null;
+
+        // Extract the local name from the qualified name (e.g., "tns:ArrayOfString" -> "ArrayOfString")
+        if (qualifiedName.Contains(':'))
+        {
+            return qualifiedName.Split(':')[1];
+        }
+
+        return qualifiedName;
     }
 
     private string MapWsdlTypeToClrType(string wsdlType, bool isCollection)

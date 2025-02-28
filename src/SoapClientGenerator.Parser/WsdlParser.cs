@@ -118,12 +118,23 @@ public class WsdlParser
             }
         }
 
+        // Check if this is an array type (has a single property with maxOccurs="unbounded")
+        bool isArrayType = false;
+        string? itemType = null;
+        if (properties.Count == 1 && properties[0].IsCollection)
+        {
+            isArrayType = true;
+            itemType = properties[0].Type;
+        }
+
         return new WsdlType
         {
             Name = name,
             Namespace = targetNamespace,
             Kind = WsdlTypeKind.Complex,
-            Properties = properties
+            Properties = properties,
+            IsArrayType = isArrayType,
+            ArrayItemType = itemType
         };
     }
 

@@ -39,6 +39,16 @@ public class WsdlType
     /// Gets or sets the collection of enumeration values for this type, if it is an enumeration.
     /// </summary>
     public ICollection<string> EnumValues { get; set; } = new List<string>();
+
+    /// <summary>
+    /// Gets or sets a value indicating whether this type is an array type.
+    /// </summary>
+    public bool IsArrayType { get; set; }
+
+    /// <summary>
+    /// Gets or sets the type of the array items, if this is an array type.
+    /// </summary>
+    public string? ArrayItemType { get; set; }
 }
 
 /// <summary>
