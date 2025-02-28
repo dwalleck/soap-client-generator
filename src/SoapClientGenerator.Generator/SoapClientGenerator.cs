@@ -65,6 +65,9 @@ public class SoapClientGenerator
             // Generate client code
             await GenerateClientCodeAsync(wsdl, outputDirectory);
 
+            // Generate project files
+            await GenerateProjectFilesAsync(outputDirectory);
+
             _logger?.LogInformation("SOAP client generation completed successfully");
         }
         catch (Exception ex)
@@ -72,6 +75,75 @@ public class SoapClientGenerator
             _logger?.LogError(ex, "Error generating SOAP client: {ErrorMessage}", ex.Message);
             throw;
         }
+    }
+
+    private async Task GenerateProjectFilesAsync(string outputDirectory)
+    {
+        // Generate csproj file
+        await GenerateCsprojFileAsync(outputDirectory);
+
+        // Generate solution file
+        await GenerateSolutionFileAsync(outputDirectory);
+    }
+
+    private async Task GenerateCsprojFileAsync(string outputDirectory)
+    {
+        string csprojContent = $@"<Project Sdk=""Microsoft.NET.Sdk"">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>{_options.Namespace}</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include=""System.ServiceModel.Http"" Version=""6.2.0"" />
+    <PackageReference Include=""System.ServiceModel.Primitives"" Version=""6.2.0"" />
+    <PackageReference Include=""Microsoft.Extensions.Logging.Abstractions"" Version=""8.0.0"" />
+    <PackageReference Include=""Polly"" Version=""8.2.0"" />
+  </ItemGroup>
+
+</Project>
+";
+
+        string projectName = _options.Namespace.Replace(".", string.Empty);
+        string csprojPath = Path.Combine(outputDirectory, $"{projectName}.csproj");
+        await File.WriteAllTextAsync(csprojPath, csprojContent);
+    }
+
+    private async Task GenerateSolutionFileAsync(string outputDirectory)
+    {
+        string projectName = _options.Namespace.Replace(".", string.Empty);
+        // Generate a GUID for the project
+        string projectGuid = Guid.NewGuid().ToString("B").ToUpper();
+        
+        string slnContent = $@"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project(""{{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}}"") = ""{projectName}"", ""{projectName}.csproj"", ""{projectGuid}""
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{projectGuid}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{projectGuid}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{projectGuid}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{projectGuid}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
+";
+
+        string slnPath = Path.Combine(outputDirectory, $"{projectName}.sln");
+        await File.WriteAllTextAsync(slnPath, slnContent);
     }
 
     private async Task GenerateClientCodeAsync(WsdlDefinition wsdl, string outputDirectory)
@@ -186,14 +258,9 @@ public class SoapClientGenerator
             "anyType" => "object",
             _ => localName // For custom types, use the local name
         };
-        
+
         // If it's a collection, wrap it in a List<>
-        if (isCollection)
-        {
-            return $"List<{clrType}>";
-        }
-        
-        return clrType;
+        return isCollection ? $"List<{clrType}>" : clrType;
     }
 
     private async Task GenerateServiceContractsAsync(WsdlDefinition wsdl, string outputDirectory)
