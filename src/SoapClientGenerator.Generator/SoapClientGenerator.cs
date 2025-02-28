@@ -117,7 +117,7 @@ public class SoapClientGenerator
         string projectName = _options.Namespace.Replace(".", string.Empty);
         // Generate a GUID for the project
         string projectGuid = Guid.NewGuid().ToString("B").ToUpper();
-        
+
         string slnContent = $@"
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
@@ -161,15 +161,12 @@ EndGlobal
     private async Task GenerateClientClassAsync(WsdlDefinition wsdl, string outputDirectory)
     {
         _logger?.LogInformation("Generating client class");
-        
+
         // Get the service name from the WSDL
         string serviceName = wsdl.Services.FirstOrDefault()?.Name ?? "SoapService";
-        
-        // Get the operation names from the WSDL
-        var operationNames = wsdl.Operations.Select(o => o.Name).ToList();
-        
+
         // Generate the client class code using the template
-        string clientCode = ClientTemplate.GenerateClientClass(_options, serviceName, operationNames);
+        string clientCode = ClientTemplate.GenerateClientClass(_options, serviceName, wsdl.Operations);
 
         // Write the client class to a file
         string clientFilePath = Path.Combine(outputDirectory, $"{_options.ClientName}.cs");
@@ -179,11 +176,11 @@ EndGlobal
     private async Task GenerateDataContractsAsync(WsdlDefinition wsdl, string outputDirectory)
     {
         _logger?.LogInformation("Generating data contracts for {TypeCount} types", wsdl.Types.Count);
-        
+
         // Create a directory for data contracts
         string dataContractsDir = Path.Combine(outputDirectory, "DataContracts");
         Directory.CreateDirectory(dataContractsDir);
-        
+
         foreach (var type in wsdl.Types)
         {
             if (type.Kind == WsdlTypeKind.Complex)
@@ -191,9 +188,9 @@ EndGlobal
                 // Generate a class for each complex type
                 var properties = type.Properties.ToDictionary(
                     p => p.Name,
-                    p => MapWsdlTypeToClrType(p.Type, p.IsCollection)
+                    p => (Type: MapWsdlTypeToClrType(p.Type, p.IsCollection), IsRequired: p.IsRequired)
                 );
-                
+
                 string classCode = ClientTemplate.GenerateDataContract(_options, type.Name, properties);
                 string filePath = Path.Combine(dataContractsDir, $"{type.Name}.cs");
                 await File.WriteAllTextAsync(filePath, classCode);
@@ -207,7 +204,7 @@ EndGlobal
             }
         }
     }
-    
+
     private string MapWsdlTypeToClrType(string wsdlType, bool isCollection)
     {
         // Extract the local name from the qualified name
@@ -216,7 +213,7 @@ EndGlobal
         {
             localName = wsdlType.Split(':')[1];
         }
-        
+
         // Map XML Schema types to CLR types
         string clrType = localName switch
         {
@@ -266,25 +263,25 @@ EndGlobal
     private async Task GenerateServiceContractsAsync(WsdlDefinition wsdl, string outputDirectory)
     {
         _logger?.LogInformation("Generating service contracts for {OperationCount} operations", wsdl.Operations.Count);
-        
+
         // Create a directory for service contracts
         string serviceContractsDir = Path.Combine(outputDirectory, "ServiceContracts");
         Directory.CreateDirectory(serviceContractsDir);
-        
+
         // Generate a service contract interface
         var sb = new System.Text.StringBuilder();
-        
+
         // Add using statements
         sb.AppendLine("using System;");
         sb.AppendLine("using System.Threading;");
         sb.AppendLine("using System.Threading.Tasks;");
         sb.AppendLine($"using {_options.Namespace}.DataContracts;");
         sb.AppendLine();
-        
+
         // Add namespace
         sb.AppendLine($"namespace {_options.Namespace}.ServiceContracts");
         sb.AppendLine("{");
-        
+
         // Add interface
         if (_options.GenerateXmlComments)
         {
@@ -294,7 +291,7 @@ EndGlobal
         }
         sb.AppendLine("    public interface IServiceContract");
         sb.AppendLine("    {");
-        
+
         // Add methods for each operation
         foreach (var operation in wsdl.Operations)
         {
@@ -306,7 +303,7 @@ EndGlobal
                 sb.AppendLine("        /// <param name=\"cancellationToken\">A cancellation token that can be used to cancel the operation</param>");
                 sb.AppendLine($"        /// <returns>The response from the {operation.Name} operation</returns>");
             }
-            
+
             // For now, we'll just generate placeholder methods
             // In a real implementation, we would parse the input and output messages
             if (_options.GenerateAsyncMethods)
@@ -319,11 +316,11 @@ EndGlobal
             }
             sb.AppendLine();
         }
-        
+
         // Close interface and namespace
         sb.AppendLine("    }");
         sb.AppendLine("}");
-        
+
         // Write the service contract to a file
         string filePath = Path.Combine(serviceContractsDir, "IServiceContract.cs");
         await File.WriteAllTextAsync(filePath, sb.ToString());
@@ -339,7 +336,7 @@ EndGlobal
                 Delay = TimeSpan.FromMilliseconds(_resilienceOptions.RetryDelayMilliseconds),
                 OnRetry = args =>
                 {
-                    _logger?.LogWarning("Retry attempt {RetryAttempt} after error: {ErrorMessage}", 
+                    _logger?.LogWarning("Retry attempt {RetryAttempt} after error: {ErrorMessage}",
                         args.AttemptNumber, args.Outcome.Exception?.Message);
                     return ValueTask.CompletedTask;
                 }

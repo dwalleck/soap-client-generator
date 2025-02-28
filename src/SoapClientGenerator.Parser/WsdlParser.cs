@@ -175,6 +175,7 @@ public class WsdlParser
     {
         var result = new List<WsdlOperation>();
         var soapActionMap = new Dictionary<string, string>();
+        var authHeaderMap = new Dictionary<string, WsdlAuthHeader>();
 
         // First, build a map of operation names to SOAP actions from the bindings
         foreach (var binding in definitions.Elements(wsdlNs + "binding"))
@@ -205,6 +206,32 @@ public class WsdlParser
                             soapActionMap[operationName] = soapAction;
                         }
                     }
+                }
+            }
+        }
+
+        // Find auth headers in messages
+        var authHeaders = new Dictionary<string, (string Element, string TypeName)>();
+        foreach (var message in definitions.Elements(wsdlNs + "message"))
+        {
+            var messageName = message.Attribute("name")?.Value;
+            if (string.IsNullOrEmpty(messageName) || !messageName.EndsWith("SWBCAuthHeader"))
+                continue;
+
+            var part = message.Element(wsdlNs + "part");
+            if (part != null)
+            {
+                var element = part.Attribute("element")?.Value;
+                if (!string.IsNullOrEmpty(element))
+                {
+                    // Extract the local name from the qualified name
+                    string typeName = element;
+                    if (element.Contains(":"))
+                    {
+                        typeName = element.Split(':')[1];
+                    }
+
+                    authHeaders[messageName] = (element, typeName);
                 }
             }
         }
@@ -263,7 +290,7 @@ public class WsdlParser
                 }
 
                 // Create the operation
-                result.Add(new WsdlOperation
+                var wsdlOperation = new WsdlOperation
                 {
                     Name = actualOperationName,
                     Documentation = documentation,
@@ -278,7 +305,38 @@ public class WsdlParser
                         Name = outputName ?? $"{operationName}Response",
                         Element = output?.Attribute("message")?.Value ?? string.Empty
                     }
-                });
+                };
+
+                // Look for auth headers in the binding operations
+                foreach (var binding in definitions.Elements(wsdlNs + "binding"))
+                {
+                    var bindingOperation = binding.Elements(wsdlNs + "operation")
+                        .FirstOrDefault(op => op.Attribute("name")?.Value == operationName);
+
+                    if (bindingOperation != null)
+                    {
+                        var bindingInput = bindingOperation.Element(wsdlNs + "input");
+                        if (bindingInput != null)
+                        {
+                            var soapHeader = bindingInput.Element(soapNs + "header");
+                            if (soapHeader != null)
+                            {
+                                var headerMessage = soapHeader.Attribute("message")?.Value;
+                                if (!string.IsNullOrEmpty(headerMessage) && authHeaders.TryGetValue(headerMessage.Split(':').Last(), out var headerInfo))
+                                {
+                                    wsdlOperation.AuthHeader = new WsdlAuthHeader
+                                    {
+                                        Name = headerMessage.Split(':').Last(),
+                                        Element = headerInfo.Element,
+                                        TypeName = headerInfo.TypeName
+                                    };
+                                }
+                            }
+                        }
+                    }
+                }
+
+                result.Add(wsdlOperation);
             }
         }
 

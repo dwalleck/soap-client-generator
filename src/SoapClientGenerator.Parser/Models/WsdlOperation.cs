@@ -34,6 +34,11 @@ public class WsdlOperation
     /// Gets or sets the collection of header messages for this operation.
     /// </summary>
     public ICollection<WsdlMessage> Headers { get; set; } = new List<WsdlMessage>();
+
+    /// <summary>
+    /// Gets or sets the auth header required for this operation, if any.
+    /// </summary>
+    public WsdlAuthHeader? AuthHeader { get; set; }
 }
 
 /// <summary>
@@ -50,4 +55,25 @@ public class WsdlMessage
     /// Gets or sets the XML element associated with this message.
     /// </summary>
     public required string Element { get; set; }
+}
+
+/// <summary>
+/// Represents an authentication header required for SOAP operations.
+/// </summary>
+public class WsdlAuthHeader
+{
+    /// <summary>
+    /// Gets or sets the name of the auth header.
+    /// </summary>
+    public required string Name { get; set; }
+
+    /// <summary>
+    /// Gets or sets the XML element associated with this auth header.
+    /// </summary>
+    public required string Element { get; set; }
+
+    /// <summary>
+    /// Gets or sets the type name of the auth header.
+    /// </summary>
+    public required string TypeName { get; set; }
 }

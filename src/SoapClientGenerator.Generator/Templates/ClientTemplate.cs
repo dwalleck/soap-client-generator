@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SoapClientGenerator.Parser.Models;
 
 namespace SoapClientGenerator.Generator.Templates;
 
@@ -14,9 +15,9 @@ internal static class ClientTemplate
     /// </summary>
     /// <param name="options">Generator options</param>
     /// <param name="serviceName">Name of the service</param>
-    /// <param name="operations">List of operation names</param>
+    /// <param name="operations">List of operations</param>
     /// <returns>The generated client class code</returns>
-    public static string GenerateClientClass(SoapClientGeneratorOptions options, string serviceName, IEnumerable<string> operations)
+    public static string GenerateClientClass(SoapClientGeneratorOptions options, string serviceName, IEnumerable<WsdlOperation> operations)
     {
         var sb = new StringBuilder();
 
@@ -71,13 +72,52 @@ internal static class ClientTemplate
         sb.AppendLine("        }");
         sb.AppendLine();
 
-        // Add helper method for creating SOAP envelope
-        sb.AppendLine("        private XDocument CreateSoapEnvelope(string action, XElement content)");
+        // Add properties for auth header credentials
+        sb.AppendLine("        private string? _username;");
+        sb.AppendLine("        private string? _password;");
+        sb.AppendLine("        private bool _useAuthHeader;");
+        sb.AppendLine();
+
+        // Add method to set auth credentials
+        if (options.GenerateXmlComments)
+        {
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Sets the authentication credentials for the SOAP service");
+            sb.AppendLine("        /// </summary>");
+            sb.AppendLine("        /// <param name=\"username\">The username for authentication</param>");
+            sb.AppendLine("        /// <param name=\"password\">The password for authentication</param>");
+        }
+        sb.AppendLine("        public void SetAuthCredentials(string username, string password)");
         sb.AppendLine("        {");
+        sb.AppendLine("            _username = username;");
+        sb.AppendLine("            _password = password;");
+        sb.AppendLine("            _useAuthHeader = true;");
+        sb.AppendLine("        }");
+        sb.AppendLine();
+
+        // Add helper method for creating SOAP envelope
+        sb.AppendLine("        private XDocument CreateSoapEnvelope(string action, XElement content, bool requiresAuth = false)");
+        sb.AppendLine("        {");
+        sb.AppendLine("            var headerElement = new XElement(_soapNs + \"Header\");");
+        sb.AppendLine();
+        sb.AppendLine("            // Add auth header if required and credentials are set");
+        sb.AppendLine("            if (requiresAuth && _useAuthHeader)");
+        sb.AppendLine("            {");
+        sb.AppendLine("                if (string.IsNullOrEmpty(_username) || string.IsNullOrEmpty(_password))");
+        sb.AppendLine("                    throw new InvalidOperationException(\"Authentication credentials not set. Call SetAuthCredentials before making authenticated requests.\");");
+        sb.AppendLine();
+        sb.AppendLine("                var tns = \"http://www.swbc.com/\";");
+        sb.AppendLine("                var authHeader = new XElement(XName.Get(\"SWBCAuthHeader\", tns),");
+        sb.AppendLine("                    new XElement(XName.Get(\"Username\", tns), _username),");
+        sb.AppendLine("                    new XElement(XName.Get(\"Password\", tns), _password)");
+        sb.AppendLine("                );");
+        sb.AppendLine("                headerElement.Add(authHeader);");
+        sb.AppendLine("            }");
+        sb.AppendLine();
         sb.AppendLine("            return new XDocument(");
         sb.AppendLine("                new XElement(_soapNs + \"Envelope\",");
         sb.AppendLine("                    new XAttribute(XNamespace.Xmlns + \"soap\", _soapNs.NamespaceName),");
-        sb.AppendLine("                    new XElement(_soapNs + \"Header\"),");
+        sb.AppendLine("                    headerElement,");
         sb.AppendLine("                    new XElement(_soapNs + \"Body\", content)");
         sb.AppendLine("                )");
         sb.AppendLine("            );");
@@ -127,24 +167,34 @@ internal static class ClientTemplate
         foreach (var operation in operations)
         {
             // Use the operation name to determine the request and response types
-            string requestType = $"{operation}";
-            string responseType = $"{operation}Response";
-            
+            string operationName = operation.Name;
+            string requestType = $"{operationName}";
+            string responseType = $"{operationName}Response";
+
+            // Check if this operation requires auth
+            bool requiresAuth = operation.AuthHeader != null;
+
             if (options.GenerateXmlComments)
             {
                 sb.AppendLine("        /// <summary>");
-                sb.AppendLine($"        /// Calls the {operation} operation");
+                sb.AppendLine($"        /// Calls the {operationName} operation");
                 sb.AppendLine("        /// </summary>");
                 sb.AppendLine($"        /// <param name=\"request\">The {requestType} request object</param>");
                 sb.AppendLine("        /// <param name=\"cancellationToken\">A cancellation token that can be used to cancel the operation</param>");
                 sb.AppendLine($"        /// <returns>The {responseType} response from the operation</returns>");
+                if (requiresAuth)
+                {
+                    sb.AppendLine("        /// <remarks>");
+                    sb.AppendLine("        /// This operation requires authentication. Call SetAuthCredentials before using this method.");
+                    sb.AppendLine("        /// </remarks>");
+                }
             }
-            
+
             if (options.GenerateAsyncMethods)
             {
-                sb.AppendLine($"        public async Task<{responseType}> {operation}Async({requestType} request, CancellationToken cancellationToken = default)");
+                sb.AppendLine($"        public async Task<{responseType}> {operationName}Async({requestType} request, CancellationToken cancellationToken = default)");
                 sb.AppendLine("        {");
-                sb.AppendLine($"            var soapAction = \"{operation}\";");
+                sb.AppendLine($"            var soapAction = \"{operation.SoapAction}\";");
                 sb.AppendLine();
                 sb.AppendLine("            // Create request element from the strongly-typed request object");
                 sb.AppendLine("            var serializer = new System.Xml.Serialization.XmlSerializer(request.GetType());");
@@ -152,7 +202,7 @@ internal static class ClientTemplate
                 sb.AppendLine("            serializer.Serialize(requestXml, request);");
                 sb.AppendLine("            var requestElement = XElement.Parse(requestXml.ToString());");
                 sb.AppendLine();
-                sb.AppendLine("            var soapEnvelope = CreateSoapEnvelope(soapAction, requestElement);");
+                sb.AppendLine($"            var soapEnvelope = CreateSoapEnvelope(soapAction, requestElement, {(requiresAuth ? "true" : "false")});");
                 sb.AppendLine();
                 sb.AppendLine("            var responseDocument = await SendSoapRequestAsync(soapAction, soapEnvelope, cancellationToken);");
                 sb.AppendLine("            var responseBody = responseDocument.Descendants(_soapNs + \"Body\").FirstOrDefault();");
@@ -165,9 +215,9 @@ internal static class ClientTemplate
             }
             else
             {
-                sb.AppendLine($"        public {responseType} {operation}({requestType} request)");
+                sb.AppendLine($"        public {responseType} {operationName}({requestType} request)");
                 sb.AppendLine("        {");
-                sb.AppendLine($"            var soapAction = \"{operation}\";");
+                sb.AppendLine($"            var soapAction = \"{operation.SoapAction}\";");
                 sb.AppendLine();
                 sb.AppendLine("            // Create request element from the strongly-typed request object");
                 sb.AppendLine("            var serializer = new System.Xml.Serialization.XmlSerializer(request.GetType());");
@@ -175,7 +225,7 @@ internal static class ClientTemplate
                 sb.AppendLine("            serializer.Serialize(requestXml, request);");
                 sb.AppendLine("            var requestElement = XElement.Parse(requestXml.ToString());");
                 sb.AppendLine();
-                sb.AppendLine("            var soapEnvelope = CreateSoapEnvelope(soapAction, requestElement);");
+                sb.AppendLine($"            var soapEnvelope = CreateSoapEnvelope(soapAction, requestElement, {(requiresAuth ? "true" : "false")});");
                 sb.AppendLine();
                 sb.AppendLine("            var responseDocument = SendSoapRequest(soapAction, soapEnvelope);");
                 sb.AppendLine("            var responseBody = responseDocument.Descendants(_soapNs + \"Body\").FirstOrDefault();");
@@ -186,7 +236,7 @@ internal static class ClientTemplate
                 sb.AppendLine($"            return ({responseType})responseSerializer.Deserialize(responseReader);");
                 sb.AppendLine("        }");
             }
-            
+
             sb.AppendLine();
         }
 
@@ -202,9 +252,9 @@ internal static class ClientTemplate
     /// </summary>
     /// <param name="options">Generator options</param>
     /// <param name="typeName">Name of the type</param>
-    /// <param name="properties">Dictionary of property names and types</param>
+    /// <param name="properties">Dictionary of property names, types, and whether they are required</param>
     /// <returns>The generated data contract class code</returns>
-    public static string GenerateDataContract(SoapClientGeneratorOptions options, string typeName, Dictionary<string, string> properties)
+    public static string GenerateDataContract(SoapClientGeneratorOptions options, string typeName, Dictionary<string, (string Type, bool IsRequired)> properties)
     {
         var sb = new StringBuilder();
 
@@ -232,14 +282,38 @@ internal static class ClientTemplate
         // Add properties
         foreach (var property in properties)
         {
+            string propertyType = property.Value.Type;
+            bool isRequired = property.Value.IsRequired;
+
+            // Make non-required properties nullable if they're value types
+            if (!isRequired && !propertyType.EndsWith("?") && !propertyType.StartsWith("List<") &&
+                !propertyType.Equals("string") && !propertyType.Equals("object") && !propertyType.EndsWith("[]"))
+            {
+                propertyType = $"{propertyType}?";
+            }
+
             if (options.GenerateXmlComments)
             {
                 sb.AppendLine("        /// <summary>");
                 sb.AppendLine($"        /// Gets or sets the {property.Key}");
+                if (!isRequired)
+                {
+                    sb.AppendLine("        /// <para>This property is optional.</para>");
+                }
                 sb.AppendLine("        /// </summary>");
             }
-            sb.AppendLine($"        [XmlElement(ElementName = \"{property.Key}\")]");
-            sb.AppendLine($"        public {property.Value} {property.Key} {{ get; set; }}");
+
+            // Add XML serialization attributes
+            if (!isRequired)
+            {
+                sb.AppendLine($"        [XmlElement(ElementName = \"{property.Key}\", IsNullable = true)]");
+            }
+            else
+            {
+                sb.AppendLine($"        [XmlElement(ElementName = \"{property.Key}\")]");
+            }
+
+            sb.AppendLine($"        public {propertyType} {property.Key} {{ get; set; }}");
             sb.AppendLine();
         }
 
@@ -295,7 +369,7 @@ internal static class ClientTemplate
             }
             sb.AppendLine($"        [XmlEnum(Name = \"{value}\")]");
             sb.Append($"        {value}");
-            
+
             if (i < valuesList.Count - 1)
             {
                 sb.AppendLine(",");

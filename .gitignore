@@ -3,7 +3,9 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+
 *.wsdl
+test-output*
 output*
 # dotenv files
 .env
