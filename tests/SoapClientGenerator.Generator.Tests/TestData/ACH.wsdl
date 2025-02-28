@@ -1,0 +1,1586 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.swbc.com/" xmlns:s1="http://microsoft.com/wsdl/types/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://www.swbc.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.swbc.com/">
+      <s:import namespace="http://microsoft.com/wsdl/types/" />
+      <s:element name="PostSinglePayment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="ConvenienceFee" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="TransDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ABA" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IndividualName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OriginType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EntityID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxDesc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NoticeLanguage" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailSendTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailBlindCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterCity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterState" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterZip" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostSinglePaymentResult" type="tns:ACHTransResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ACHTransResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ResponseCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ResponseMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ResponseStringRaw" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SWBCAuthHeader" type="tns:SWBCAuthHeader" />
+      <s:complexType name="SWBCAuthHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:element name="PostSinglePaymentV3_1">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="ConvenienceFee" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="TransDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ABA" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IndividualName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OriginType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EntityID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxDesc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NoticeLanguage" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailSendTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailBlindCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterCity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterState" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterZip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="RequestToken" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="InBranch" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentV3_1Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostSinglePaymentV3_1Result" type="tns:ACHTransResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithApplyTo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="ConvenienceFee" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="TransDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ABA" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IndividualName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OriginType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EntityID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxDesc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NoticeLanguage" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailSendTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailBlindCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterCity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterState" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterZip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ApplyToName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ApplyToAccountType" type="s1:char" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithApplyToResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostSinglePaymentWithApplyToResult" type="tns:ACHTransResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithApplyToV3_1">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="ConvenienceFee" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="TransDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ABA" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IndividualName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OriginType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EntityID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxDesc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NoticeLanguage" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailSendTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailBlindCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterCity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterState" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterZip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ApplyToName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ApplyToAccountType" type="s1:char" />
+            <s:element minOccurs="0" maxOccurs="1" name="RequestToken" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="InBranch" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithApplyToV3_1Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostSinglePaymentWithApplyToV3_1Result" type="tns:ACHTransResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithPaymentSource">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="ConvenienceFee" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="TransDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ABA" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IndividualName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OriginType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EntityID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxDesc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NoticeLanguage" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailSendTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailBlindCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterCity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterState" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterZip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ApplyToName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ApplyToAccountType" type="s1:char" />
+            <s:element minOccurs="1" maxOccurs="1" name="PaymentSource" type="tns:PaymentSource" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="PaymentSource">
+        <s:restriction base="s:string">
+          <s:enumeration value="OnlineAkcelerant" />
+          <s:enumeration value="OnlineECM" />
+          <s:enumeration value="OnlineWeblet" />
+          <s:enumeration value="OnlineModules" />
+          <s:enumeration value="ScheduledTask_StatusResubmission" />
+          <s:enumeration value="ScheduledTask_SubmitRecurringTransactions" />
+          <s:enumeration value="ScheduledTask_GeneratePayments" />
+          <s:enumeration value="WebService_AKCPaymentProcessor" />
+          <s:enumeration value="WebService_IVRPaymentProcessor" />
+          <s:enumeration value="WebService_PaymentProcessor" />
+          <s:enumeration value="WebService_Cash" />
+          <s:enumeration value="BaconLoanPay" />
+          <s:enumeration value="BaconEnterprise" />
+          <s:enumeration value="Payments" />
+          <s:enumeration value="Symitar" />
+          <s:enumeration value="MeridianLink" />
+          <s:enumeration value="SymXchange" />
+          <s:enumeration value="Akuvo" />
+          <s:enumeration value="ClarkCountySaml" />
+          <s:enumeration value="Tccs" />
+          <s:enumeration value="CovantageSaml" />
+          <s:enumeration value="IvrSupportTeam" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="PostSinglePaymentWithPaymentSourceResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostSinglePaymentWithPaymentSourceResult" type="tns:ACHTransResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithPaymentSourceV3_1">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="ConvenienceFee" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="TransDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ABA" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IndividualName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OriginType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EntityID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxDesc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NoticeLanguage" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailSendTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailBlindCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterCity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterState" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterZip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ApplyToName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ApplyToAccountType" type="s1:char" />
+            <s:element minOccurs="1" maxOccurs="1" name="PaymentSource" type="tns:PaymentSource" />
+            <s:element minOccurs="0" maxOccurs="1" name="RequestToken" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="InBranch" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithPaymentSourceV3_1Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostSinglePaymentWithPaymentSourceV3_1Result" type="tns:ACHTransResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithPaymentSourceAndRecurringId">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="ConvenienceFee" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="TransDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ABA" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IndividualName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OriginType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EntityID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxDesc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NoticeLanguage" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailSendTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailBlindCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterCity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterState" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterZip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ApplyToName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ApplyToAccountType" type="s1:char" />
+            <s:element minOccurs="1" maxOccurs="1" name="PaymentSource" type="tns:PaymentSource" />
+            <s:element minOccurs="0" maxOccurs="1" name="RecurringId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithPaymentSourceAndRecurringIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostSinglePaymentWithPaymentSourceAndRecurringIdResult" type="tns:ACHTransResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="ConvenienceFee" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="TransDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ABA" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IndividualName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OriginType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EntityID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxDesc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NoticeLanguage" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailSendTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailBlindCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterCity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterState" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterZip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ApplyToName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ApplyToAccountType" type="s1:char" />
+            <s:element minOccurs="1" maxOccurs="1" name="PaymentSource" type="tns:PaymentSource" />
+            <s:element minOccurs="0" maxOccurs="1" name="RecurringId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="RequestToken" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="InBranch" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1Result" type="tns:ACHTransResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithPayToABANumber">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="ConvenienceFee" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="TransDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ABA" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IndividualName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OriginType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EntityID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxDesc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NoticeLanguage" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailSendTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailBlindCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterCity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterState" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterZip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PayToABANumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithPayToABANumberResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostSinglePaymentWithPayToABANumberResult" type="tns:ACHTransResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithPayToABANumberV3_1">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="ConvenienceFee" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="TransDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ABA" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IndividualName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OriginType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EntityID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxDesc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NoticeLanguage" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailSendTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailBlindCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterCity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterState" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterZip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PayToABANumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="RequestToken" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="InBranch" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithPayToABANumberV3_1Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostSinglePaymentWithPayToABANumberV3_1Result" type="tns:ACHTransResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostACHPaymentWithApplyFundsToList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="applyFundsToList" type="tns:ArrayOfApplyFundsTo" />
+            <s:element minOccurs="0" maxOccurs="1" name="aba" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="entityId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="payFromName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="payFromAccountNumber" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="convenienceFee" type="s:double" />
+            <s:element minOccurs="0" maxOccurs="1" name="trxCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="trxDesc" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="transDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="transType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="recurringID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="noticeLanguage" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="emailSendTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="emailCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="emailBlindCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="letterAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="letterAddress2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="letterCity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="letterState" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="letterZip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="originType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="partyId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="paymentSource" type="tns:PaymentSource" />
+            <s:element minOccurs="0" maxOccurs="1" name="submittedIpAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="requestToken" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="inBranch" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfApplyFundsTo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ApplyFundsTo" nillable="true" type="tns:ApplyFundsTo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ApplyFundsTo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ApplyToAccountNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ApplyToName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ApplyToAccountType" type="s1:char" />
+          <s:element minOccurs="1" maxOccurs="1" name="ApplyToAmount" type="s:double" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="PostACHPaymentWithApplyFundsToListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostACHPaymentWithApplyFundsToListResult" type="tns:ACHTransResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithACHWebValidation">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="applyFundsToList" type="tns:ArrayOfApplyFundsTo" />
+            <s:element minOccurs="0" maxOccurs="1" name="aba" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="entityId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="payFromName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="payFromAccountNumber" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="convenienceFee" type="s:double" />
+            <s:element minOccurs="0" maxOccurs="1" name="trxCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="trxDesc" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="transDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="transType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="recurringID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="noticeLanguage" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="emailSendTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="emailCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="emailBlindCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="letterAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="letterAddress2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="letterCity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="letterState" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="letterZip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="originType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="partyId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="paymentSource" type="tns:PaymentSource" />
+            <s:element minOccurs="0" maxOccurs="1" name="submittedIpAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="requestToken" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="inBranch" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="webValidated" nillable="true" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="paymentSourceChannel" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="partnerName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithACHWebValidationResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostSinglePaymentWithACHWebValidationResult" type="tns:ACHTransResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithACHWebValidationSOR">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="applyFundsToList" type="tns:ArrayOfApplyFundsTo" />
+            <s:element minOccurs="0" maxOccurs="1" name="aba" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="entityId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="payFromName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="payFromAccountNumber" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="convenienceFee" type="s:double" />
+            <s:element minOccurs="0" maxOccurs="1" name="trxCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="trxDesc" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="transDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="transType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="recurringID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="noticeLanguage" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="emailSendTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="emailCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="emailBlindCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="letterAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="letterAddress2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="letterCity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="letterState" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="letterZip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="originType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="partyId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="paymentSource" type="tns:PaymentSource" />
+            <s:element minOccurs="0" maxOccurs="1" name="submittedIpAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="requestToken" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="inBranch" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="webValidated" nillable="true" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="paymentSourceChannel" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="partnerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="stateOfResidence" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FeeSource" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithACHWebValidationSORResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostSinglePaymentWithACHWebValidationSORResult" type="tns:ACHTransResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddress">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="ConvenienceFee" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="TransDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ABA" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IndividualName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OriginType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EntityID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxDesc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NoticeLanguage" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailSendTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailBlindCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterCity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterState" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterZip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ApplyToName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ApplyToAccountType" type="s1:char" />
+            <s:element minOccurs="1" maxOccurs="1" name="PaymentSource" type="tns:PaymentSource" />
+            <s:element minOccurs="0" maxOccurs="1" name="RecurringId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SubmittedIPAddress" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressResult" type="tns:ACHTransResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="ConvenienceFee" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="TransDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ABA" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IndividualName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OriginType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EntityID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxDesc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NoticeLanguage" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailSendTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailBlindCopyTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterAddress2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterCity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterState" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LetterZip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ApplyToName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ApplyToAccountType" type="s1:char" />
+            <s:element minOccurs="1" maxOccurs="1" name="PaymentSource" type="tns:PaymentSource" />
+            <s:element minOccurs="0" maxOccurs="1" name="RecurringId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SubmittedIPAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="RequestToken" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="InBranch" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1Result" type="tns:ACHTransResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="ConvenienceFee" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="TransDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ABA" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IndividualName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OriginType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EntityID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxDesc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NoticeLanguage" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailSendTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ApplyToName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ApplyToAccountType" type="s1:char" />
+            <s:element minOccurs="1" maxOccurs="1" name="PaymentSource" type="tns:PaymentSource" />
+            <s:element minOccurs="0" maxOccurs="1" name="SubmittedIPAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="RequestToken" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="InBranch" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1Result" type="tns:ACHTransResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostRecurringPayment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="ConvenienceFee" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="TransDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ABA" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IndividualName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OriginType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EntityID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="RecurrType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="RecurrValue1" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="RecurrValue2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="RecurrValue3" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="NumOccurrences" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="RunBeforeDay" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="EndDate" type="s:dateTime" />
+            <s:element minOccurs="1" maxOccurs="1" name="FinalAmount" type="s:double" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransDescription" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IndividualIDNumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostRecurringPaymentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostRecurringPaymentResult" type="tns:ACHTransResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostRecurringPaymentV3_1">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="ConvenienceFee" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="TransDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ABA" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TrxCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IndividualName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OriginType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EntityID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="RecurrType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="RecurrValue1" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="RecurrValue2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="RecurrValue3" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="NumOccurrences" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="RunBeforeDay" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="EndDate" type="s:dateTime" />
+            <s:element minOccurs="1" maxOccurs="1" name="FinalAmount" type="s:double" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransDescription" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IndividualIDNumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostRecurringPaymentV3_1Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostRecurringPaymentV3_1Result" type="tns:ACHTransResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ValidateABANumber">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ABANumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ValidateABANumberResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ValidateABANumberResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetABACompletionList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ABAPart" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="AmountToReturn" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetABACompletionListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetABACompletionListResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetStatusUpdate">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TrackingNumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetStatusUpdateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetStatusUpdateResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetStatusUpdateForList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TrackingNumberList" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetStatusUpdateForListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetStatusUpdateForListResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TestF5Function">
+        <s:complexType />
+      </s:element>
+      <s:element name="TestF5FunctionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="TestF5FunctionResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://microsoft.com/wsdl/types/">
+      <s:simpleType name="char">
+        <s:restriction base="s:unsignedShort" />
+      </s:simpleType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="PostSinglePaymentSoapIn">
+    <wsdl:part name="parameters" element="tns:PostSinglePayment" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentSoapOut">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentResponse" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentSWBCAuthHeader">
+    <wsdl:part name="SWBCAuthHeader" element="tns:SWBCAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentV3_1SoapIn">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentV3_1" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentV3_1SoapOut">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentV3_1Response" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentV3_1SWBCAuthHeader">
+    <wsdl:part name="SWBCAuthHeader" element="tns:SWBCAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithApplyToSoapIn">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithApplyTo" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithApplyToSoapOut">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithApplyToResponse" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithApplyToSWBCAuthHeader">
+    <wsdl:part name="SWBCAuthHeader" element="tns:SWBCAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithApplyToV3_1SoapIn">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithApplyToV3_1" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithApplyToV3_1SoapOut">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithApplyToV3_1Response" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithApplyToV3_1SWBCAuthHeader">
+    <wsdl:part name="SWBCAuthHeader" element="tns:SWBCAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceSoapIn">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithPaymentSource" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceSoapOut">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithPaymentSourceResponse" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceSWBCAuthHeader">
+    <wsdl:part name="SWBCAuthHeader" element="tns:SWBCAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceV3_1SoapIn">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithPaymentSourceV3_1" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceV3_1SoapOut">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithPaymentSourceV3_1Response" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceV3_1SWBCAuthHeader">
+    <wsdl:part name="SWBCAuthHeader" element="tns:SWBCAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceAndRecurringIdSoapIn">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithPaymentSourceAndRecurringId" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceAndRecurringIdSoapOut">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithPaymentSourceAndRecurringIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceAndRecurringIdSWBCAuthHeader">
+    <wsdl:part name="SWBCAuthHeader" element="tns:SWBCAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1SoapIn">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1SoapOut">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1Response" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1SWBCAuthHeader">
+    <wsdl:part name="SWBCAuthHeader" element="tns:SWBCAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPayToABANumberSoapIn">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithPayToABANumber" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPayToABANumberSoapOut">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithPayToABANumberResponse" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPayToABANumberSWBCAuthHeader">
+    <wsdl:part name="SWBCAuthHeader" element="tns:SWBCAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPayToABANumberV3_1SoapIn">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithPayToABANumberV3_1" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPayToABANumberV3_1SoapOut">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithPayToABANumberV3_1Response" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPayToABANumberV3_1SWBCAuthHeader">
+    <wsdl:part name="SWBCAuthHeader" element="tns:SWBCAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="PostACHPaymentWithApplyFundsToListSoapIn">
+    <wsdl:part name="parameters" element="tns:PostACHPaymentWithApplyFundsToList" />
+  </wsdl:message>
+  <wsdl:message name="PostACHPaymentWithApplyFundsToListSoapOut">
+    <wsdl:part name="parameters" element="tns:PostACHPaymentWithApplyFundsToListResponse" />
+  </wsdl:message>
+  <wsdl:message name="PostACHPaymentWithApplyFundsToListSWBCAuthHeader">
+    <wsdl:part name="SWBCAuthHeader" element="tns:SWBCAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithACHWebValidationSoapIn">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithACHWebValidation" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithACHWebValidationSoapOut">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithACHWebValidationResponse" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithACHWebValidationSWBCAuthHeader">
+    <wsdl:part name="SWBCAuthHeader" element="tns:SWBCAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithACHWebValidationSORSoapIn">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithACHWebValidationSOR" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithACHWebValidationSORSoapOut">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithACHWebValidationSORResponse" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithACHWebValidationSORSWBCAuthHeader">
+    <wsdl:part name="SWBCAuthHeader" element="tns:SWBCAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressSoapIn">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddress" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressSoapOut">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressResponse" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressSWBCAuthHeader">
+    <wsdl:part name="SWBCAuthHeader" element="tns:SWBCAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1SoapIn">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1SoapOut">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1Response" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1SWBCAuthHeader">
+    <wsdl:part name="SWBCAuthHeader" element="tns:SWBCAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1SoapIn">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1SoapOut">
+    <wsdl:part name="parameters" element="tns:PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1Response" />
+  </wsdl:message>
+  <wsdl:message name="PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1SWBCAuthHeader">
+    <wsdl:part name="SWBCAuthHeader" element="tns:SWBCAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="PostRecurringPaymentSoapIn">
+    <wsdl:part name="parameters" element="tns:PostRecurringPayment" />
+  </wsdl:message>
+  <wsdl:message name="PostRecurringPaymentSoapOut">
+    <wsdl:part name="parameters" element="tns:PostRecurringPaymentResponse" />
+  </wsdl:message>
+  <wsdl:message name="PostRecurringPaymentSWBCAuthHeader">
+    <wsdl:part name="SWBCAuthHeader" element="tns:SWBCAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="PostRecurringPaymentV3_1SoapIn">
+    <wsdl:part name="parameters" element="tns:PostRecurringPaymentV3_1" />
+  </wsdl:message>
+  <wsdl:message name="PostRecurringPaymentV3_1SoapOut">
+    <wsdl:part name="parameters" element="tns:PostRecurringPaymentV3_1Response" />
+  </wsdl:message>
+  <wsdl:message name="PostRecurringPaymentV3_1SWBCAuthHeader">
+    <wsdl:part name="SWBCAuthHeader" element="tns:SWBCAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="ValidateABANumberSoapIn">
+    <wsdl:part name="parameters" element="tns:ValidateABANumber" />
+  </wsdl:message>
+  <wsdl:message name="ValidateABANumberSoapOut">
+    <wsdl:part name="parameters" element="tns:ValidateABANumberResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetABACompletionListSoapIn">
+    <wsdl:part name="parameters" element="tns:GetABACompletionList" />
+  </wsdl:message>
+  <wsdl:message name="GetABACompletionListSoapOut">
+    <wsdl:part name="parameters" element="tns:GetABACompletionListResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetStatusUpdateSoapIn">
+    <wsdl:part name="parameters" element="tns:GetStatusUpdate" />
+  </wsdl:message>
+  <wsdl:message name="GetStatusUpdateSoapOut">
+    <wsdl:part name="parameters" element="tns:GetStatusUpdateResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetStatusUpdateForListSoapIn">
+    <wsdl:part name="parameters" element="tns:GetStatusUpdateForList" />
+  </wsdl:message>
+  <wsdl:message name="GetStatusUpdateForListSoapOut">
+    <wsdl:part name="parameters" element="tns:GetStatusUpdateForListResponse" />
+  </wsdl:message>
+  <wsdl:message name="TestF5FunctionSoapIn">
+    <wsdl:part name="parameters" element="tns:TestF5Function" />
+  </wsdl:message>
+  <wsdl:message name="TestF5FunctionSoapOut">
+    <wsdl:part name="parameters" element="tns:TestF5FunctionResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ACHTransactionSoap">
+    <wsdl:operation name="PostSinglePayment">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Post a Single ACH transaction. Returns ACHTransResponse Class</wsdl:documentation>
+      <wsdl:input message="tns:PostSinglePaymentSoapIn" />
+      <wsdl:output message="tns:PostSinglePaymentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Post a Single ACH transaction. Returns ACHTransResponse Class</wsdl:documentation>
+      <wsdl:input message="tns:PostSinglePaymentV3_1SoapIn" />
+      <wsdl:output message="tns:PostSinglePaymentV3_1SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePayment">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Post a Single ACH transaction with apply to info. Returns ACHTransResponse Class</wsdl:documentation>
+      <wsdl:input name="PostSinglePaymentWithApplyTo" message="tns:PostSinglePaymentWithApplyToSoapIn" />
+      <wsdl:output name="PostSinglePaymentWithApplyTo" message="tns:PostSinglePaymentWithApplyToSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Post a Single ACH transaction with apply to info. Returns ACHTransResponse Class</wsdl:documentation>
+      <wsdl:input name="PostSinglePaymentWithApplyToV3_1" message="tns:PostSinglePaymentWithApplyToV3_1SoapIn" />
+      <wsdl:output name="PostSinglePaymentWithApplyToV3_1" message="tns:PostSinglePaymentWithApplyToV3_1SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePayment">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Post a Single ACH transaction with apply to and Payment Source Info. Returns ACHTransResponse Class</wsdl:documentation>
+      <wsdl:input name="PostSinglePaymentWithPaymentSource" message="tns:PostSinglePaymentWithPaymentSourceSoapIn" />
+      <wsdl:output name="PostSinglePaymentWithPaymentSource" message="tns:PostSinglePaymentWithPaymentSourceSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Post a Single ACH transaction with apply to and Payment Source Info. Returns ACHTransResponse Class</wsdl:documentation>
+      <wsdl:input name="PostSinglePaymentWithPaymentSourceV3_1" message="tns:PostSinglePaymentWithPaymentSourceV3_1SoapIn" />
+      <wsdl:output name="PostSinglePaymentWithPaymentSourceV3_1" message="tns:PostSinglePaymentWithPaymentSourceV3_1SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePayment">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Post a Single ACH transaction with apply to and Payment Source Info. Returns ACHTransResponse Class</wsdl:documentation>
+      <wsdl:input name="PostSinglePaymentWithPaymentSourceAndRecurringId" message="tns:PostSinglePaymentWithPaymentSourceAndRecurringIdSoapIn" />
+      <wsdl:output name="PostSinglePaymentWithPaymentSourceAndRecurringId" message="tns:PostSinglePaymentWithPaymentSourceAndRecurringIdSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Post a Single ACH transaction with apply to and Payment Source Info. Returns ACHTransResponse Class</wsdl:documentation>
+      <wsdl:input name="PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1" message="tns:PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1SoapIn" />
+      <wsdl:output name="PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1" message="tns:PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePayment">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Post a Single ACH transaction with PayToABANumber. Returns ACHTransResponse Class</wsdl:documentation>
+      <wsdl:input name="PostSinglePaymentWithPayToABANumber" message="tns:PostSinglePaymentWithPayToABANumberSoapIn" />
+      <wsdl:output name="PostSinglePaymentWithPayToABANumber" message="tns:PostSinglePaymentWithPayToABANumberSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Post a Single ACH transaction with PayToABANumber. Returns ACHTransResponse Class</wsdl:documentation>
+      <wsdl:input name="PostSinglePaymentWithPayToABANumberV3_1" message="tns:PostSinglePaymentWithPayToABANumberV3_1SoapIn" />
+      <wsdl:output name="PostSinglePaymentWithPayToABANumberV3_1" message="tns:PostSinglePaymentWithPayToABANumberV3_1SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PostACHPaymentWithApplyFundsToList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Post a single ACH transaction with multiple apply to information, SEC origin, Payment Source and IP address.  Returns ACHTransResponse.</wsdl:documentation>
+      <wsdl:input message="tns:PostACHPaymentWithApplyFundsToListSoapIn" />
+      <wsdl:output message="tns:PostACHPaymentWithApplyFundsToListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentWithAchWebValidation">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Post a single ACH transaction with multiple apply to information, SEC origin, Payment Source and IP address with ACH WebVerification.  Returns ACHTransResponse.</wsdl:documentation>
+      <wsdl:input name="PostSinglePaymentWithACHWebValidation" message="tns:PostSinglePaymentWithACHWebValidationSoapIn" />
+      <wsdl:output name="PostSinglePaymentWithACHWebValidation" message="tns:PostSinglePaymentWithACHWebValidationSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentWithAchWebValidation">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Post a single ACH transaction with multiple apply to information, SEC origin, Payment Source, State of Residence and IP address with ACH WebVerification.  Returns ACHTransResponse.</wsdl:documentation>
+      <wsdl:input name="PostSinglePaymentWithACHWebValidationSOR" message="tns:PostSinglePaymentWithACHWebValidationSORSoapIn" />
+      <wsdl:output name="PostSinglePaymentWithACHWebValidationSOR" message="tns:PostSinglePaymentWithACHWebValidationSORSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePayment">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Post a Single ACH transaction with Apply To, Payment Source Info, Recurrnig Id, and SubmittedIPAddress. Returns ACHTransResponse Class</wsdl:documentation>
+      <wsdl:input name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddress" message="tns:PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressSoapIn" />
+      <wsdl:output name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddress" message="tns:PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Post a Single ACH transaction with Apply To, Payment Source Info, Recurrnig Id, and SubmittedIPAddress. Returns ACHTransResponse Class</wsdl:documentation>
+      <wsdl:input name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1" message="tns:PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1SoapIn" />
+      <wsdl:output name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1" message="tns:PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Post a Single ACH transaction with Apply To, Payment Source Info, and SubmittedIPAddress. Returns ACHTransResponse Class</wsdl:documentation>
+      <wsdl:input name="PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1" message="tns:PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1SoapIn" />
+      <wsdl:output name="PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1" message="tns:PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PostRecurringPayment">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Post a Recurring ACH transaction.  Returns ACHTransResponse Class</wsdl:documentation>
+      <wsdl:input message="tns:PostRecurringPaymentSoapIn" />
+      <wsdl:output message="tns:PostRecurringPaymentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PostRecurringPaymentV3_1">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Post a Recurring ACH transaction.  Returns ACHTransResponse Class</wsdl:documentation>
+      <wsdl:input message="tns:PostRecurringPaymentV3_1SoapIn" />
+      <wsdl:output message="tns:PostRecurringPaymentV3_1SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ValidateABANumber">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Verify the ABA Routing Number.  Returns Boolean Value.</wsdl:documentation>
+      <wsdl:input message="tns:ValidateABANumberSoapIn" />
+      <wsdl:output message="tns:ValidateABANumberSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetABACompletionList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Auto Complete ABA Number.  Returns String Array.</wsdl:documentation>
+      <wsdl:input message="tns:GetABACompletionListSoapIn" />
+      <wsdl:output message="tns:GetABACompletionListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStatusUpdate">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get the status of a Transaction.  Returns String.</wsdl:documentation>
+      <wsdl:input message="tns:GetStatusUpdateSoapIn" />
+      <wsdl:output message="tns:GetStatusUpdateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStatusUpdateForList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get the status of a list of Transactions.  Returns String Array.</wsdl:documentation>
+      <wsdl:input message="tns:GetStatusUpdateForListSoapIn" />
+      <wsdl:output message="tns:GetStatusUpdateForListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TestF5Function">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Dummy Function.  Testing Only</wsdl:documentation>
+      <wsdl:input message="tns:TestF5FunctionSoapIn" />
+      <wsdl:output message="tns:TestF5FunctionSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ACHTransactionSoap" type="tns:ACHTransactionSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="PostSinglePayment">
+      <soap:operation soapAction="http://www.swbc.com/PostSinglePayment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:PostSinglePaymentSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <soap:operation soapAction="http://www.swbc.com/PostSinglePaymentV3_1" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:PostSinglePaymentV3_1SWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePayment">
+      <soap:operation soapAction="http://www.swbc.com/PostSinglePaymentWithApplyTo" style="document" />
+      <wsdl:input name="PostSinglePaymentWithApplyTo">
+        <soap:body use="literal" />
+        <soap:header message="tns:PostSinglePaymentWithApplyToSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithApplyTo">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <soap:operation soapAction="http://www.swbc.com/PostSinglePaymentWithApplyToV3_1" style="document" />
+      <wsdl:input name="PostSinglePaymentWithApplyToV3_1">
+        <soap:body use="literal" />
+        <soap:header message="tns:PostSinglePaymentWithApplyToV3_1SWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithApplyToV3_1">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePayment">
+      <soap:operation soapAction="http://www.swbc.com/PostSinglePaymentWithPaymentSource" style="document" />
+      <wsdl:input name="PostSinglePaymentWithPaymentSource">
+        <soap:body use="literal" />
+        <soap:header message="tns:PostSinglePaymentWithPaymentSourceSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithPaymentSource">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <soap:operation soapAction="http://www.swbc.com/PostSinglePaymentWithPaymentSourceV3_1" style="document" />
+      <wsdl:input name="PostSinglePaymentWithPaymentSourceV3_1">
+        <soap:body use="literal" />
+        <soap:header message="tns:PostSinglePaymentWithPaymentSourceV3_1SWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithPaymentSourceV3_1">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePayment">
+      <soap:operation soapAction="http://www.swbc.com/PostSinglePaymentWithPaymentSourceAndRecurringId" style="document" />
+      <wsdl:input name="PostSinglePaymentWithPaymentSourceAndRecurringId">
+        <soap:body use="literal" />
+        <soap:header message="tns:PostSinglePaymentWithPaymentSourceAndRecurringIdSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithPaymentSourceAndRecurringId">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <soap:operation soapAction="http://www.swbc.com/PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1" style="document" />
+      <wsdl:input name="PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1">
+        <soap:body use="literal" />
+        <soap:header message="tns:PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1SWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePayment">
+      <soap:operation soapAction="http://www.swbc.com/PostSinglePaymentWithPayToABANumber" style="document" />
+      <wsdl:input name="PostSinglePaymentWithPayToABANumber">
+        <soap:body use="literal" />
+        <soap:header message="tns:PostSinglePaymentWithPayToABANumberSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithPayToABANumber">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <soap:operation soapAction="http://www.swbc.com/PostSinglePaymentWithPayToABANumberV3_1" style="document" />
+      <wsdl:input name="PostSinglePaymentWithPayToABANumberV3_1">
+        <soap:body use="literal" />
+        <soap:header message="tns:PostSinglePaymentWithPayToABANumberV3_1SWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithPayToABANumberV3_1">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostACHPaymentWithApplyFundsToList">
+      <soap:operation soapAction="http://www.swbc.com/PostACHPaymentWithApplyFundsToList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:PostACHPaymentWithApplyFundsToListSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentWithAchWebValidation">
+      <soap:operation soapAction="http://www.swbc.com/PostSinglePaymentWithACHWebValidation" style="document" />
+      <wsdl:input name="PostSinglePaymentWithACHWebValidation">
+        <soap:body use="literal" />
+        <soap:header message="tns:PostSinglePaymentWithACHWebValidationSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithACHWebValidation">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentWithAchWebValidation">
+      <soap:operation soapAction="http://www.swbc.com/PostSinglePaymentWithACHWebValidationSOR" style="document" />
+      <wsdl:input name="PostSinglePaymentWithACHWebValidationSOR">
+        <soap:body use="literal" />
+        <soap:header message="tns:PostSinglePaymentWithACHWebValidationSORSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithACHWebValidationSOR">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePayment">
+      <soap:operation soapAction="http://www.swbc.com/PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddress" style="document" />
+      <wsdl:input name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddress">
+        <soap:body use="literal" />
+        <soap:header message="tns:PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddress">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <soap:operation soapAction="http://www.swbc.com/PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1" style="document" />
+      <wsdl:input name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1">
+        <soap:body use="literal" />
+        <soap:header message="tns:PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1SWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <soap:operation soapAction="http://www.swbc.com/PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1" style="document" />
+      <wsdl:input name="PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1">
+        <soap:body use="literal" />
+        <soap:header message="tns:PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1SWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostRecurringPayment">
+      <soap:operation soapAction="http://www.swbc.com/PostRecurringPayment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:PostRecurringPaymentSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostRecurringPaymentV3_1">
+      <soap:operation soapAction="http://www.swbc.com/PostRecurringPaymentV3_1" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:PostRecurringPaymentV3_1SWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateABANumber">
+      <soap:operation soapAction="http://www.swbc.com/ValidateABANumber" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetABACompletionList">
+      <soap:operation soapAction="http://www.swbc.com/GetABACompletionList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStatusUpdate">
+      <soap:operation soapAction="http://www.swbc.com/GetStatusUpdate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStatusUpdateForList">
+      <soap:operation soapAction="http://www.swbc.com/GetStatusUpdateForList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TestF5Function">
+      <soap:operation soapAction="http://www.swbc.com/TestF5Function" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ACHTransactionSoap12" type="tns:ACHTransactionSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="PostSinglePayment">
+      <soap12:operation soapAction="http://www.swbc.com/PostSinglePayment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PostSinglePaymentSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <soap12:operation soapAction="http://www.swbc.com/PostSinglePaymentV3_1" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PostSinglePaymentV3_1SWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePayment">
+      <soap12:operation soapAction="http://www.swbc.com/PostSinglePaymentWithApplyTo" style="document" />
+      <wsdl:input name="PostSinglePaymentWithApplyTo">
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PostSinglePaymentWithApplyToSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithApplyTo">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <soap12:operation soapAction="http://www.swbc.com/PostSinglePaymentWithApplyToV3_1" style="document" />
+      <wsdl:input name="PostSinglePaymentWithApplyToV3_1">
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PostSinglePaymentWithApplyToV3_1SWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithApplyToV3_1">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePayment">
+      <soap12:operation soapAction="http://www.swbc.com/PostSinglePaymentWithPaymentSource" style="document" />
+      <wsdl:input name="PostSinglePaymentWithPaymentSource">
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PostSinglePaymentWithPaymentSourceSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithPaymentSource">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <soap12:operation soapAction="http://www.swbc.com/PostSinglePaymentWithPaymentSourceV3_1" style="document" />
+      <wsdl:input name="PostSinglePaymentWithPaymentSourceV3_1">
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PostSinglePaymentWithPaymentSourceV3_1SWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithPaymentSourceV3_1">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePayment">
+      <soap12:operation soapAction="http://www.swbc.com/PostSinglePaymentWithPaymentSourceAndRecurringId" style="document" />
+      <wsdl:input name="PostSinglePaymentWithPaymentSourceAndRecurringId">
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PostSinglePaymentWithPaymentSourceAndRecurringIdSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithPaymentSourceAndRecurringId">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <soap12:operation soapAction="http://www.swbc.com/PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1" style="document" />
+      <wsdl:input name="PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1">
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1SWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithPaymentSourceAndRecurringIdV3_1">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePayment">
+      <soap12:operation soapAction="http://www.swbc.com/PostSinglePaymentWithPayToABANumber" style="document" />
+      <wsdl:input name="PostSinglePaymentWithPayToABANumber">
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PostSinglePaymentWithPayToABANumberSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithPayToABANumber">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <soap12:operation soapAction="http://www.swbc.com/PostSinglePaymentWithPayToABANumberV3_1" style="document" />
+      <wsdl:input name="PostSinglePaymentWithPayToABANumberV3_1">
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PostSinglePaymentWithPayToABANumberV3_1SWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithPayToABANumberV3_1">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostACHPaymentWithApplyFundsToList">
+      <soap12:operation soapAction="http://www.swbc.com/PostACHPaymentWithApplyFundsToList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PostACHPaymentWithApplyFundsToListSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentWithAchWebValidation">
+      <soap12:operation soapAction="http://www.swbc.com/PostSinglePaymentWithACHWebValidation" style="document" />
+      <wsdl:input name="PostSinglePaymentWithACHWebValidation">
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PostSinglePaymentWithACHWebValidationSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithACHWebValidation">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentWithAchWebValidation">
+      <soap12:operation soapAction="http://www.swbc.com/PostSinglePaymentWithACHWebValidationSOR" style="document" />
+      <wsdl:input name="PostSinglePaymentWithACHWebValidationSOR">
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PostSinglePaymentWithACHWebValidationSORSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithACHWebValidationSOR">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePayment">
+      <soap12:operation soapAction="http://www.swbc.com/PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddress" style="document" />
+      <wsdl:input name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddress">
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddress">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <soap12:operation soapAction="http://www.swbc.com/PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1" style="document" />
+      <wsdl:input name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1">
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1SWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithPaymentSourceRecurringIdAndSubmittedIPAddressV3_1">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostSinglePaymentV3_1">
+      <soap12:operation soapAction="http://www.swbc.com/PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1" style="document" />
+      <wsdl:input name="PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1">
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1SWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="PostSinglePaymentWithPaymentSourceAndSubmittedIPAddressV3_1">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostRecurringPayment">
+      <soap12:operation soapAction="http://www.swbc.com/PostRecurringPayment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PostRecurringPaymentSWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostRecurringPaymentV3_1">
+      <soap12:operation soapAction="http://www.swbc.com/PostRecurringPaymentV3_1" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PostRecurringPaymentV3_1SWBCAuthHeader" part="SWBCAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateABANumber">
+      <soap12:operation soapAction="http://www.swbc.com/ValidateABANumber" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetABACompletionList">
+      <soap12:operation soapAction="http://www.swbc.com/GetABACompletionList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStatusUpdate">
+      <soap12:operation soapAction="http://www.swbc.com/GetStatusUpdate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStatusUpdateForList">
+      <soap12:operation soapAction="http://www.swbc.com/GetStatusUpdateForList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TestF5Function">
+      <soap12:operation soapAction="http://www.swbc.com/TestF5Function" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ACHTransaction">
+    <wsdl:port name="ACHTransactionSoap" binding="tns:ACHTransactionSoap">
+      <soap:address location="http://localhost:2785/ach.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ACHTransactionSoap12" binding="tns:ACHTransactionSoap12">
+      <soap12:address location="http://localhost:2785/ach.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

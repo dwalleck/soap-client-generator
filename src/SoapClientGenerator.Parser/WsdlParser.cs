@@ -1,4 +1,4 @@
-using System.Xml.Linq;
+ using System.Xml.Linq;
 using SoapClientGenerator.Parser.Models;
 
 namespace SoapClientGenerator.Parser;
@@ -106,8 +106,7 @@ public class WsdlParser
     {
         var name = simpleType.Attribute("name")?.Value ?? string.Empty;
         var restriction = simpleType.Element(xsdNs + "restriction");
-        var enumValues = new List<string>();
-
+        
         if (restriction != null)
         {
             var enums = restriction.Elements(xsdNs + "enumeration")
@@ -139,49 +138,111 @@ public class WsdlParser
     private List<WsdlOperation> ParseOperations(XElement definitions)
     {
         var result = new List<WsdlOperation>();
+        var soapActionMap = new Dictionary<string, string>();
+        
+        // First, build a map of operation names to SOAP actions from the bindings
+        foreach (var binding in definitions.Elements(wsdlNs + "binding"))
+        {
+            foreach (var operation in binding.Elements(wsdlNs + "operation"))
+            {
+                var operationName = operation.Attribute("name")?.Value;
+                if (string.IsNullOrEmpty(operationName))
+                    continue;
+                
+                var soapOperation = operation.Element(soapNs + "operation");
+                if (soapOperation != null)
+                {
+                    var soapAction = soapOperation.Attribute("soapAction")?.Value;
+                    if (!string.IsNullOrEmpty(soapAction))
+                    {
+                        // Handle overloaded operations by checking the input name
+                        var input = operation.Element(wsdlNs + "input");
+                        var inputName = input?.Attribute("name")?.Value;
+                        
+                        // For overloaded operations, use the input name as the key
+                        if (!string.IsNullOrEmpty(inputName))
+                        {
+                            soapActionMap[inputName] = soapAction;
+                        }
+                        else
+                        {
+                            soapActionMap[operationName] = soapAction;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Now parse the operations from the portTypes
         var portTypes = definitions.Elements(wsdlNs + "portType");
-
         foreach (var portType in portTypes)
         {
             foreach (var operation in portType.Elements(wsdlNs + "operation"))
             {
-                var baseOperationName = operation.Attribute("name")?.Value ?? string.Empty;
+                var operationName = operation.Attribute("name")?.Value ?? string.Empty;
                 var documentation = operation.Element(wsdlNs + "documentation")?.Value ?? string.Empty;
                 var input = operation.Element(wsdlNs + "input");
                 var output = operation.Element(wsdlNs + "output");
-
-                // Get the operation name from the binding that matches this operation's input message
-                var inputMessageRef = input?.Attribute("message")?.Value ?? string.Empty;
-                var bindingOperations = definitions.Elements(wsdlNs + "binding")
-                    .Elements(wsdlNs + "operation")
-                    .Where(o => {
-                        var opName = o.Attribute("name")?.Value;
-                        return opName == baseOperationName;
-                    })
-                    .ToList();
-
-                foreach (var bindingOp in bindingOperations)
+                
+                // Get the input and output names
+                var inputName = input?.Attribute("name")?.Value;
+                var outputName = output?.Attribute("name")?.Value;
+                
+                // Determine the actual operation name
+                string actualOperationName = operationName;
+                if (!string.IsNullOrEmpty(inputName))
                 {
-                    var soapAction = bindingOp.Element(soapNs + "operation")?.Attribute("soapAction")?.Value ?? string.Empty;
-                    var operationName = bindingOp.Attribute("name")?.Value ?? string.Empty;
-                    
-                    result.Add(new WsdlOperation
-                    {
-                        Name = operationName,
-                        Documentation = documentation,
-                        SoapAction = soapAction,
-                        Input = new WsdlMessage
-                        {
-                            Name = input?.Attribute("name")?.Value ?? $"{operationName}Request",
-                            Element = inputMessageRef
-                        },
-                        Output = new WsdlMessage
-                        {
-                            Name = output?.Attribute("name")?.Value ?? $"{operationName}Response",
-                            Element = output?.Attribute("message")?.Value ?? string.Empty
-                        }
-                    });
+                    // For overloaded operations, use the input name as the operation name
+                    actualOperationName = inputName;
                 }
+                
+                // Try to find the SOAP action
+                string soapAction = string.Empty;
+                
+                // First try with the input name if available
+                if (!string.IsNullOrEmpty(inputName) && soapActionMap.TryGetValue(inputName, out var action))
+                {
+                    soapAction = action;
+                }
+                // Then try with the operation name
+                else if (soapActionMap.TryGetValue(operationName, out action))
+                {
+                    soapAction = action;
+                }
+                // If still not found, try to construct it from the target namespace and operation name
+                else
+                {
+                    var targetNamespace = definitions.Attribute("targetNamespace")?.Value ?? string.Empty;
+                    if (!string.IsNullOrEmpty(targetNamespace))
+                    {
+                        if (!string.IsNullOrEmpty(inputName))
+                        {
+                            soapAction = $"{targetNamespace.TrimEnd('/')}/{inputName}";
+                        }
+                        else
+                        {
+                            soapAction = $"{targetNamespace.TrimEnd('/')}/{operationName}";
+                        }
+                    }
+                }
+                
+                // Create the operation
+                result.Add(new WsdlOperation
+                {
+                    Name = actualOperationName,
+                    Documentation = documentation,
+                    SoapAction = soapAction,
+                    Input = new WsdlMessage
+                    {
+                        Name = inputName ?? $"{operationName}Request",
+                        Element = input?.Attribute("message")?.Value ?? string.Empty
+                    },
+                    Output = new WsdlMessage
+                    {
+                        Name = outputName ?? $"{operationName}Response",
+                        Element = output?.Attribute("message")?.Value ?? string.Empty
+                    }
+                });
             }
         }
 
@@ -195,9 +256,11 @@ public class WsdlParser
 
         foreach (var binding in bindings)
         {
+            var bindingName = binding.Attribute("name")?.Value ?? string.Empty;
             var soapBinding = binding.Element(soapNs + "binding");
             var operations = new Dictionary<string, string>();
 
+            // Parse all operations from the binding
             var bindingOperations = binding.Elements(wsdlNs + "operation")
                 .Where(op => !string.IsNullOrEmpty(op.Attribute("name")?.Value))
                 .ToList();
@@ -206,19 +269,31 @@ public class WsdlParser
             {
                 var name = operation.Attribute("name")!.Value;
                 var soapOperation = operation.Element(soapNs + "operation");
+                
                 if (soapOperation != null)
                 {
                     var soapAction = soapOperation.Attribute("soapAction")?.Value ?? string.Empty;
                     if (!string.IsNullOrEmpty(soapAction))
                     {
-                        operations[name] = soapAction;
+                        // Handle overloaded operations with different input/output
+                        var inputElement = operation.Element(wsdlNs + "input");
+                        var inputName = inputElement?.Attribute("name")?.Value;
+                        
+                        // If this is an overloaded operation with a specific input name, use that as the key
+                        string operationKey = name;
+                        if (!string.IsNullOrEmpty(inputName))
+                        {
+                            operationKey = inputName;
+                        }
+                        
+                        operations[operationKey] = soapAction;
                     }
                 }
             }
 
             result.Add(new WsdlBinding
             {
-                Name = binding.Attribute("name")?.Value ?? string.Empty,
+                Name = bindingName,
                 Type = binding.Attribute("type")?.Value ?? string.Empty,
                 Transport = soapBinding?.Attribute("transport")?.Value ?? string.Empty,
                 OperationSoapActions = operations
