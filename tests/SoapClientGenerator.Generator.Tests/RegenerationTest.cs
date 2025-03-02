@@ -52,9 +52,9 @@ namespace SoapClientGenerator.Generator.Tests
 
             // Check if the client code uses the improved serialization method
             Assert.Contains("var namespaces = new System.Xml.Serialization.XmlSerializerNamespaces();", clientCode);
-            Assert.Contains("// Find the namespace prefix for the target namespace", clientCode);
+            Assert.Contains("// Use the target namespace with a standard prefix", clientCode);
             Assert.Contains("string tns = ", clientCode);
-            Assert.Contains("string prefix = \"tns\"; // Default prefix if not found", clientCode);
+            Assert.Contains("string prefix = \"tns\"; // Standard prefix for target namespace", clientCode);
             Assert.Contains("namespaces.Add(prefix, tns);", clientCode);
             Assert.Contains("serializer.Serialize(writer, request, namespaces);", clientCode);
             Assert.Contains("// Remove any elements with xsi:nil=\"true\" attributes", clientCode);

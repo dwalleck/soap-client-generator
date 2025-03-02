@@ -218,17 +218,9 @@ internal static class ClientTemplate
                 sb.AppendLine("            var namespaces = new System.Xml.Serialization.XmlSerializerNamespaces();");
 
                 // Find the namespace prefix for the target namespace
-                sb.AppendLine("            // Find the namespace prefix for the target namespace");
+                sb.AppendLine("            // Use the target namespace with a standard prefix");
                 sb.AppendLine($"            string tns = \"{targetNamespace}\";");
-                sb.AppendLine("            string prefix = \"tns\"; // Default prefix if not found");
-                sb.AppendLine("            foreach (var ns in new Dictionary<string, string>(namespaces))");
-                sb.AppendLine("            {");
-                sb.AppendLine("                if (ns.Value == tns)");
-                sb.AppendLine("                {");
-                sb.AppendLine("                    prefix = ns.Key;");
-                sb.AppendLine("                    break;");
-                sb.AppendLine("                }");
-                sb.AppendLine("            }");
+                sb.AppendLine("            string prefix = \"tns\"; // Standard prefix for target namespace");
                 sb.AppendLine($"            namespaces.Add(prefix, tns);");
 
                 sb.AppendLine("            var settings = new System.Xml.XmlWriterSettings");
@@ -279,17 +271,9 @@ internal static class ClientTemplate
                 sb.AppendLine("            var namespaces = new System.Xml.Serialization.XmlSerializerNamespaces();");
 
                 // Find the namespace prefix for the target namespace
-                sb.AppendLine("            // Find the namespace prefix for the target namespace");
+                sb.AppendLine("            // Use the target namespace with a standard prefix");
                 sb.AppendLine($"            string tns = \"{targetNamespace}\";");
-                sb.AppendLine("            string prefix = \"tns\"; // Default prefix if not found");
-                sb.AppendLine("            foreach (var ns in new Dictionary<string, string>(namespaces))");
-                sb.AppendLine("            {");
-                sb.AppendLine("                if (ns.Value == tns)");
-                sb.AppendLine("                {");
-                sb.AppendLine("                    prefix = ns.Key;");
-                sb.AppendLine("                    break;");
-                sb.AppendLine("                }");
-                sb.AppendLine("            }");
+                sb.AppendLine("            string prefix = \"tns\"; // Standard prefix for target namespace");
                 sb.AppendLine($"            namespaces.Add(prefix, tns);");
 
                 sb.AppendLine("            var settings = new System.Xml.XmlWriterSettings");
