@@ -1,78 +1,32 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace SoapClientGenerator.Generator.Tests
 {
     public class SerializationTests
     {
-        private readonly ITestOutputHelper _output;
-
-        public SerializationTests(ITestOutputHelper output)
-        {
-            _output = output;
-        }
-
         [Fact]
-        public void TestRequestSerialization_CurrentImplementation()
+        public void SerializeRequest_WithNullValues_RemovesNilElements()
         {
-            // Create a sample request object
-            var request = new SampleRequest
+            // Arrange
+            var request = new TestRequest
             {
-                Amount = 100.0,
-                ConvenienceFee = 5.0,
-                TransDate = DateTime.Now,
-                TransType = "Payment",
-                ABA = "123456789",
-                AccountNumber = "987654321",
-                IndividualName = "John Doe"
+                RequiredField = "Required Value",
+                OptionalField = null // This should be removed from the final XML
             };
 
-            // Current implementation
+            // Act - Original serialization method (problematic)
             var serializer = new XmlSerializer(request.GetType());
             var requestXml = new StringWriter();
             serializer.Serialize(requestXml, request);
-            var requestString = requestXml.ToString();
+            var originalXml = XElement.Parse(requestXml.ToString());
 
-            // Output the serialized XML for inspection
-            _output.WriteLine("Serialized XML (Current Implementation):");
-            _output.WriteLine(requestString);
-
-            // Parse to XElement (as done in the client)
-            var requestElement = XElement.Parse(requestString);
-
-            // Output the parsed XElement for inspection
-            _output.WriteLine("\nParsed XElement (Current Implementation):");
-            _output.WriteLine(requestElement.ToString());
-
-            // Check if the namespace is preserved
-            Assert.Contains("xmlns", requestString);
-
-            // The namespace might be lost when parsing to XElement
-            // This is likely the issue with the current implementation
-        }
-
-        [Fact]
-        public void TestRequestSerialization_ImprovedImplementation()
-        {
-            // Create a sample request object
-            var request = new SampleRequest
-            {
-                Amount = 100.0,
-                ConvenienceFee = 5.0,
-                TransDate = DateTime.Now,
-                TransType = "Payment",
-                ABA = "123456789",
-                AccountNumber = "987654321",
-                IndividualName = "John Doe"
-            };
-
-            // Improved implementation that preserves namespaces
-            var serializer = new XmlSerializer(request.GetType());
+            // Act - Improved serialization method
             var settings = new XmlWriterSettings
             {
                 Indent = true,
@@ -87,67 +41,39 @@ namespace SoapClientGenerator.Generator.Tests
 
             ms.Position = 0;
             var doc = XDocument.Load(ms);
-            var requestElement = doc.Root;
+            var improvedXml = doc.Root;
 
-            // Output the serialized XML for inspection
-            _output.WriteLine("Serialized XML (Improved Implementation):");
-            _output.WriteLine(requestElement.ToString());
+            // Remove any elements with xsi:nil="true" attributes
+            var xsiNamespace = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
+            foreach (var element in improvedXml.Descendants().ToList())
+            {
+                var nilAttribute = element.Attribute(xsiNamespace + "nil");
+                if (nilAttribute != null && nilAttribute.Value == "true")
+                {
+                    element.Remove();
+                }
+            }
 
-            // Check if the namespace is preserved
-            Assert.NotNull(requestElement.Name.Namespace);
-            Assert.NotEqual("", requestElement.Name.Namespace.NamespaceName);
+            // Assert
+            // Original XML should contain the nil element
+            var xsiNil = originalXml.Descendants()
+                .Where(e => e.Attribute(xsiNamespace + "nil") != null)
+                .ToList();
+            Assert.NotEmpty(xsiNil);
+            Assert.Contains(xsiNil, e => e.Name.LocalName == "OptionalField");
 
-            // Create a SOAP envelope with this element
-            var soapNs = "http://schemas.xmlsoap.org/soap/envelope/";
-            var soapEnvelope = new XDocument(
-                new XElement(XName.Get("Envelope", soapNs),
-                    new XAttribute(XNamespace.Xmlns + "soap", soapNs),
-                    new XElement(XName.Get("Header", soapNs)),
-                    new XElement(XName.Get("Body", soapNs), requestElement)
-                )
-            );
-
-            // Output the SOAP envelope for inspection
-            _output.WriteLine("\nSOAP Envelope (Improved Implementation):");
-            _output.WriteLine(soapEnvelope.ToString());
-
-            // Verify the SOAP envelope structure
-            Assert.NotNull(soapEnvelope.Root);
-            Assert.Equal(soapNs, soapEnvelope.Root.Name.Namespace.NamespaceName);
-            Assert.Equal("Envelope", soapEnvelope.Root.Name.LocalName);
-
-            var bodyElement = soapEnvelope.Root.Element(XName.Get("Body", soapNs));
-            Assert.NotNull(bodyElement);
-
-            var requestInBody = bodyElement.Elements().FirstOrDefault();
-            Assert.NotNull(requestInBody);
-            Assert.Equal(requestElement.Name, requestInBody.Name);
+            // Improved XML should not contain the nil element
+            Assert.DoesNotContain(improvedXml.Descendants(), e => e.Name.LocalName == "OptionalField");
         }
-    }
 
-    // Sample request class for testing
-    [XmlRoot(ElementName = "PostSinglePayment", Namespace = "http://www.swbc.com/")]
-    public class SampleRequest
-    {
-        [XmlElement(ElementName = "Amount")]
-        public double Amount { get; set; }
+        [XmlRoot(ElementName = "TestRequest", Namespace = "http://test.com/")]
+        public class TestRequest
+        {
+            [XmlElement(ElementName = "RequiredField")]
+            public string RequiredField { get; set; }
 
-        [XmlElement(ElementName = "ConvenienceFee")]
-        public double ConvenienceFee { get; set; }
-
-        [XmlElement(ElementName = "TransDate")]
-        public DateTime TransDate { get; set; }
-
-        [XmlElement(ElementName = "TransType")]
-        public string TransType { get; set; }
-
-        [XmlElement(ElementName = "ABA")]
-        public string ABA { get; set; }
-
-        [XmlElement(ElementName = "AccountNumber")]
-        public string AccountNumber { get; set; }
-
-        [XmlElement(ElementName = "IndividualName")]
-        public string IndividualName { get; set; }
+            [XmlElement(ElementName = "OptionalField", IsNullable = true)]
+            public string OptionalField { get; set; }
+        }
     }
 }

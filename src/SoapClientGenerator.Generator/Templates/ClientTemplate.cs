@@ -214,6 +214,16 @@ internal static class ClientTemplate
                 sb.AppendLine("            var doc = System.Xml.Linq.XDocument.Load(ms);");
                 sb.AppendLine("            var requestElement = doc.Root;");
                 sb.AppendLine();
+                sb.AppendLine("            // Remove any elements with xsi:nil=\"true\" attributes");
+                sb.AppendLine("            foreach (var element in requestElement.Descendants().ToList())");
+                sb.AppendLine("            {");
+                sb.AppendLine("                var nilAttribute = element.Attribute(System.Xml.Linq.XNamespace.Get(\"http://www.w3.org/2001/XMLSchema-instance\") + \"nil\");");
+                sb.AppendLine("                if (nilAttribute != null && nilAttribute.Value == \"true\")");
+                sb.AppendLine("                {");
+                sb.AppendLine("                    element.Remove();");
+                sb.AppendLine("                }");
+                sb.AppendLine("            }");
+                sb.AppendLine();
                 sb.AppendLine($"            var soapEnvelope = CreateSoapEnvelope(soapAction, requestElement, {(requiresAuth ? "true" : "false")});");
                 sb.AppendLine();
                 sb.AppendLine("            var responseDocument = await SendSoapRequestAsync(soapAction, soapEnvelope, cancellationToken);");

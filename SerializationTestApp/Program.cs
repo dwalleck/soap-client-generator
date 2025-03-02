@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -43,7 +45,7 @@ namespace SerializationTestApp
                 TransDate = DateTime.Now,
                 TransType = "Payment",
                 ABA = "123456789",
-                AccountNumber = "987654321"
+                AccountNumber = null // Set to null to test nil handling
             };
 
             Console.WriteLine("\nOriginal Serialization Method:");
@@ -110,6 +112,18 @@ namespace SerializationTestApp
             var doc = XDocument.Load(ms);
             var improvedRequestElement = doc.Root;
 
+            // Remove any elements with xsi:nil="true" attributes (as done in the improved client)
+            var xsiNamespace = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
+            foreach (var element in improvedRequestElement.Descendants().ToList())
+            {
+                var nilAttribute = element.Attribute(xsiNamespace + "nil");
+                if (nilAttribute != null && nilAttribute.Value == "true")
+                {
+                    Console.WriteLine($"\nRemoving nil element: {element.Name}");
+                    element.Remove();
+                }
+            }
+
             Console.WriteLine("Serialized XML:");
             Console.WriteLine(improvedRequestElement);
 
@@ -144,6 +158,12 @@ namespace SerializationTestApp
             Console.WriteLine("2. Improved method preserves namespaces for both root and child elements");
             Console.WriteLine("3. SOAP service expects elements with the correct namespace");
             Console.WriteLine("4. When accessing child elements, you need to use the correct namespace with the improved method");
+
+            Console.WriteLine("\nHandling Null Values:");
+            Console.WriteLine("-------------------");
+            Console.WriteLine("1. Original serialization includes null values with xsi:nil=\"true\" attributes");
+            Console.WriteLine("2. Our improved implementation removes elements with nil attributes");
+            Console.WriteLine("3. This ensures that null values are not included in the SOAP request");
 
             Console.WriteLine("\nPress any key to exit...");
             Console.ReadKey();
