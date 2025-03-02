@@ -16,8 +16,10 @@ internal static class ClientTemplate
     /// <param name="options">Generator options</param>
     /// <param name="serviceName">Name of the service</param>
     /// <param name="operations">List of operations</param>
+    /// <param name="targetNamespace">The target namespace from the WSDL</param>
+    /// <param name="namespaces">The namespaces defined in the WSDL</param>
     /// <returns>The generated client class code</returns>
-    public static string GenerateClientClass(SoapClientGeneratorOptions options, string serviceName, IEnumerable<WsdlOperation> operations)
+    public static string GenerateClientClass(SoapClientGeneratorOptions options, string serviceName, IEnumerable<WsdlOperation> operations, string targetNamespace, IDictionary<string, string> namespaces)
     {
         var sb = new StringBuilder();
 
@@ -106,13 +108,25 @@ internal static class ClientTemplate
         sb.AppendLine("                if (string.IsNullOrEmpty(_username) || string.IsNullOrEmpty(_password))");
         sb.AppendLine("                    throw new InvalidOperationException(\"Authentication credentials not set. Call SetAuthCredentials before making authenticated requests.\");");
         sb.AppendLine();
-                sb.AppendLine("                var tns = \"http://www.swbc.com/\";");
+                sb.AppendLine($"                var tns = \"{targetNamespace}\";");
                 sb.AppendLine("                var namespaces = new XmlSerializerNamespaces();");
-                sb.AppendLine("                namespaces.Add(\"swbc\", tns);");
-                sb.AppendLine("                var authHeader = new XElement(XName.Get(\"SWBCAuthHeader\", tns),");
-                sb.AppendLine("                    new XAttribute(XNamespace.Xmlns + \"swbc\", tns),");
-                sb.AppendLine("                    new XElement(XName.Get(\"Username\", tns), _username),");
-                sb.AppendLine("                    new XElement(XName.Get(\"Password\", tns), _password)");
+
+                // Find the namespace prefix for the target namespace
+                string prefix = "tns"; // Default prefix if not found
+                foreach (var ns in namespaces)
+                {
+                    if (ns.Value == targetNamespace)
+                    {
+                        prefix = ns.Key;
+                        break;
+                    }
+                }
+
+                sb.AppendLine($"                namespaces.Add(\"{prefix}\", tns);");
+                sb.AppendLine($"                var authHeader = new XElement(XName.Get(\"SWBCAuthHeader\", tns),");
+                sb.AppendLine($"                    new XAttribute(XNamespace.Xmlns + \"{prefix}\", tns),");
+                sb.AppendLine($"                    new XElement(XName.Get(\"Username\", tns), _username),");
+                sb.AppendLine($"                    new XElement(XName.Get(\"Password\", tns), _password)");
                 sb.AppendLine("                );");
         sb.AppendLine("                headerElement.Add(authHeader);");
         sb.AppendLine("            }");
@@ -202,7 +216,21 @@ internal static class ClientTemplate
                 sb.AppendLine("            // Create request element from the strongly-typed request object");
                 sb.AppendLine("            var serializer = new System.Xml.Serialization.XmlSerializer(request.GetType());");
                 sb.AppendLine("            var namespaces = new System.Xml.Serialization.XmlSerializerNamespaces();");
-                sb.AppendLine("            namespaces.Add(\"swbc\", \"http://www.swbc.com/\");");
+
+                // Find the namespace prefix for the target namespace
+                sb.AppendLine("            // Find the namespace prefix for the target namespace");
+                sb.AppendLine($"            string tns = \"{targetNamespace}\";");
+                sb.AppendLine("            string prefix = \"tns\"; // Default prefix if not found");
+                sb.AppendLine("            foreach (var ns in new Dictionary<string, string>(namespaces))");
+                sb.AppendLine("            {");
+                sb.AppendLine("                if (ns.Value == tns)");
+                sb.AppendLine("                {");
+                sb.AppendLine("                    prefix = ns.Key;");
+                sb.AppendLine("                    break;");
+                sb.AppendLine("                }");
+                sb.AppendLine("            }");
+                sb.AppendLine($"            namespaces.Add(prefix, tns);");
+
                 sb.AppendLine("            var settings = new System.Xml.XmlWriterSettings");
                 sb.AppendLine("            {");
                 sb.AppendLine("                Indent = true,");
@@ -249,7 +277,21 @@ internal static class ClientTemplate
                 sb.AppendLine("            // Create request element from the strongly-typed request object");
                 sb.AppendLine("            var serializer = new System.Xml.Serialization.XmlSerializer(request.GetType());");
                 sb.AppendLine("            var namespaces = new System.Xml.Serialization.XmlSerializerNamespaces();");
-                sb.AppendLine("            namespaces.Add(\"swbc\", \"http://www.swbc.com/\");");
+
+                // Find the namespace prefix for the target namespace
+                sb.AppendLine("            // Find the namespace prefix for the target namespace");
+                sb.AppendLine($"            string tns = \"{targetNamespace}\";");
+                sb.AppendLine("            string prefix = \"tns\"; // Default prefix if not found");
+                sb.AppendLine("            foreach (var ns in new Dictionary<string, string>(namespaces))");
+                sb.AppendLine("            {");
+                sb.AppendLine("                if (ns.Value == tns)");
+                sb.AppendLine("                {");
+                sb.AppendLine("                    prefix = ns.Key;");
+                sb.AppendLine("                    break;");
+                sb.AppendLine("                }");
+                sb.AppendLine("            }");
+                sb.AppendLine($"            namespaces.Add(prefix, tns);");
+
                 sb.AppendLine("            var settings = new System.Xml.XmlWriterSettings");
                 sb.AppendLine("            {");
                 sb.AppendLine("                Indent = true,");

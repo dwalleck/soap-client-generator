@@ -96,6 +96,9 @@ namespace SerializationTestApp
             Console.WriteLine("------------------------------");
 
             // Improved serialization method
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("swbc", "http://www.swbc.com/");
+
             var settings = new XmlWriterSettings
             {
                 Indent = true,
@@ -105,12 +108,15 @@ namespace SerializationTestApp
             var ms = new MemoryStream();
             using (var writer = XmlWriter.Create(ms, settings))
             {
-                serializer.Serialize(writer, request);
+                serializer.Serialize(writer, request, namespaces);
             }
 
             ms.Position = 0;
             var doc = XDocument.Load(ms);
             var improvedRequestElement = doc.Root;
+
+            Console.WriteLine("Raw XML with namespaces:");
+            Console.WriteLine(improvedRequestElement);
 
             // Remove any elements with xsi:nil="true" attributes (as done in the improved client)
             var xsiNamespace = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");

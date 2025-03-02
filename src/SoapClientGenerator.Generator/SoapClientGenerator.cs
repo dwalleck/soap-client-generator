@@ -166,7 +166,7 @@ EndGlobal
         string serviceName = wsdl.Services.FirstOrDefault()?.Name ?? "SoapService";
 
         // Generate the client class code using the template
-        string clientCode = ClientTemplate.GenerateClientClass(_options, serviceName, wsdl.Operations);
+        string clientCode = ClientTemplate.GenerateClientClass(_options, serviceName, wsdl.Operations, wsdl.TargetNamespace, wsdl.Namespaces);
 
         // Write the client class to a file
         string clientFilePath = Path.Combine(outputDirectory, $"{_options.ClientName}.cs");
