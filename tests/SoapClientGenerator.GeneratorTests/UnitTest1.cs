@@ -1,4 +1,4 @@
-﻿namespace SoapClientGenerator.Generator.Tests;
+namespace SoapClientGenerator.GeneratorTests;
 
 public class UnitTest1
 {

@@ -64,17 +64,53 @@ public class WsdlParser
         foreach (var schema in schemas)
         {
             var targetNamespace = schema.Attribute("targetNamespace")?.Value ?? string.Empty;
+            var elementFormDefault = schema.Attribute("elementFormDefault")?.Value;
+            bool isElementFormQualified = elementFormDefault == "qualified";
+
+            // Extract namespace prefix from targetNamespace
+            string? namespacePrefix = null;
+            if (isElementFormQualified && !string.IsNullOrEmpty(targetNamespace))
+            {
+                // Extract the domain part from the URL
+                Uri uri;
+                if (Uri.TryCreate(targetNamespace, UriKind.Absolute, out uri))
+                {
+                    // Get the host part and extract the domain name
+                    string host = uri.Host;
+                    string[] parts = host.Split('.');
+
+                    // Find the main domain name part (usually the second-to-last part)
+                    if (parts.Length >= 2)
+                    {
+                        // Skip common subdomains like "www", "api", etc.
+                        int domainPartIndex = 0;
+                        if (parts.Length > 2 && (parts[0] == "www" || parts[0] == "api" || parts[0] == "services"))
+                        {
+                            domainPartIndex = 1;
+                        }
+
+                        // Use the domain name (e.g., "testcompany" from "www.testcompany.com")
+                        namespacePrefix = parts[domainPartIndex];
+                    }
+                }
+            }
 
             // Parse complex types
             foreach (var complexType in schema.Elements(xsdNs + "complexType"))
             {
-                result.Add(ParseComplexType(complexType, targetNamespace));
+                var type = ParseComplexType(complexType, targetNamespace);
+                type.ElementFormQualified = isElementFormQualified;
+                type.NamespacePrefix = namespacePrefix;
+                result.Add(type);
             }
 
             // Parse simple types
             foreach (var simpleType in schema.Elements(xsdNs + "simpleType"))
             {
-                result.Add(ParseSimpleType(simpleType, targetNamespace));
+                var type = ParseSimpleType(simpleType, targetNamespace);
+                type.ElementFormQualified = isElementFormQualified;
+                type.NamespacePrefix = namespacePrefix;
+                result.Add(type);
             }
 
             // Parse elements that have complex types inline
@@ -83,7 +119,10 @@ public class WsdlParser
                 var complexType = element.Element(xsdNs + "complexType");
                 if (complexType != null)
                 {
-                    result.Add(ParseComplexType(complexType, targetNamespace, element.Attribute("name")?.Value));
+                    var type = ParseComplexType(complexType, targetNamespace, element.Attribute("name")?.Value);
+                    type.ElementFormQualified = isElementFormQualified;
+                    type.NamespacePrefix = namespacePrefix;
+                    result.Add(type);
                 }
             }
         }
@@ -226,7 +265,7 @@ public class WsdlParser
         foreach (var message in definitions.Elements(wsdlNs + "message"))
         {
             var messageName = message.Attribute("name")?.Value;
-            if (string.IsNullOrEmpty(messageName) || !messageName.EndsWith("SWBCAuthHeader"))
+            if (string.IsNullOrEmpty(messageName))
                 continue;
 
             var part = message.Element(wsdlNs + "part");
@@ -242,7 +281,14 @@ public class WsdlParser
                         typeName = element.Split(':')[1];
                     }
 
-                    authHeaders[messageName] = (element, typeName);
+                    // Check if this is an auth header (either by name convention or by examining the element name)
+                    if (messageName.EndsWith("SWBCAuthHeader") ||
+                        messageName.EndsWith("AuthHeader") ||
+                        typeName.EndsWith("AuthHeader") ||
+                        typeName.Contains("Auth"))
+                    {
+                        authHeaders[messageName] = (element, typeName);
+                    }
                 }
             }
         }

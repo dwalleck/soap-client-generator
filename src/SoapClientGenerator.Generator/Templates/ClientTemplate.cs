@@ -8,7 +8,7 @@ namespace SoapClientGenerator.Generator.Templates;
 /// <summary>
 /// Template for generating SOAP client code
 /// </summary>
-internal static class ClientTemplate
+public static class ClientTemplate
 {
     /// <summary>
     /// Generates the client class code
@@ -223,6 +223,24 @@ internal static class ClientTemplate
                 sb.AppendLine("            string prefix = \"tns\"; // Standard prefix for target namespace");
                 sb.AppendLine($"            namespaces.Add(prefix, tns);");
 
+                // Add code to handle qualified elements
+                sb.AppendLine();
+                sb.AppendLine("            // Handle qualified elements by adding XML attributes");
+                sb.AppendLine("            var requestType = request.GetType();");
+                sb.AppendLine("            var typeInfo = requestType.Assembly.GetTypes()");
+                sb.AppendLine("                .FirstOrDefault(t => t.Name == requestType.Name);");
+                sb.AppendLine("            if (typeInfo != null)");
+                sb.AppendLine("            {");
+                sb.AppendLine("                // Check if this type has ElementFormQualified set to true");
+                sb.AppendLine("                var elementFormQualified = (bool?)typeInfo.GetProperty(\"ElementFormQualified\")?.GetValue(null) ?? false;");
+                sb.AppendLine("                var namespacePrefix = (string?)typeInfo.GetProperty(\"NamespacePrefix\")?.GetValue(null);");
+                sb.AppendLine("                if (elementFormQualified && !string.IsNullOrEmpty(namespacePrefix))");
+                sb.AppendLine("                {");
+                sb.AppendLine("                    // Add the namespace prefix for qualified elements");
+                sb.AppendLine("                    namespaces.Add(namespacePrefix, tns);");
+                sb.AppendLine("                }");
+                sb.AppendLine("            }");
+
                 sb.AppendLine("            var settings = new System.Xml.XmlWriterSettings");
                 sb.AppendLine("            {");
                 sb.AppendLine("                Indent = true,");
@@ -275,6 +293,24 @@ internal static class ClientTemplate
                 sb.AppendLine($"            string tns = \"{targetNamespace}\";");
                 sb.AppendLine("            string prefix = \"tns\"; // Standard prefix for target namespace");
                 sb.AppendLine($"            namespaces.Add(prefix, tns);");
+
+                // Add code to handle qualified elements
+                sb.AppendLine();
+                sb.AppendLine("            // Handle qualified elements by adding XML attributes");
+                sb.AppendLine("            var requestType = request.GetType();");
+                sb.AppendLine("            var typeInfo = requestType.Assembly.GetTypes()");
+                sb.AppendLine("                .FirstOrDefault(t => t.Name == requestType.Name);");
+                sb.AppendLine("            if (typeInfo != null)");
+                sb.AppendLine("            {");
+                sb.AppendLine("                // Check if this type has ElementFormQualified set to true");
+                sb.AppendLine("                var elementFormQualified = (bool?)typeInfo.GetProperty(\"ElementFormQualified\")?.GetValue(null) ?? false;");
+                sb.AppendLine("                var namespacePrefix = (string?)typeInfo.GetProperty(\"NamespacePrefix\")?.GetValue(null);");
+                sb.AppendLine("                if (elementFormQualified && !string.IsNullOrEmpty(namespacePrefix))");
+                sb.AppendLine("                {");
+                sb.AppendLine("                    // Add the namespace prefix for qualified elements");
+                sb.AppendLine("                    namespaces.Add(namespacePrefix, tns);");
+                sb.AppendLine("                }");
+                sb.AppendLine("            }");
 
                 sb.AppendLine("            var settings = new System.Xml.XmlWriterSettings");
                 sb.AppendLine("            {");

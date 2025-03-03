@@ -6,6 +6,16 @@ namespace SoapClientGenerator.Parser.Models;
 public class WsdlType
 {
     /// <summary>
+    /// Gets or sets a value indicating whether elements of this type should be qualified with a namespace.
+    /// </summary>
+    public bool ElementFormQualified { get; set; }
+
+    /// <summary>
+    /// Gets or sets the namespace prefix to use for qualified elements.
+    /// </summary>
+    public string? NamespacePrefix { get; set; }
+
+    /// <summary>
     /// Gets or sets the name of the type.
     /// </summary>
     public required string Name { get; set; }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Polly;
@@ -216,9 +217,55 @@ EndGlobal
                     }
                 );
 
+                // Add static properties for ElementFormQualified and NamespacePrefix
+                var sb = new StringBuilder();
+                sb.AppendLine("using System;");
+                sb.AppendLine("using System.Xml.Serialization;");
+                sb.AppendLine();
+                sb.AppendLine($"namespace {_options.Namespace}.DataContracts");
+                sb.AppendLine("{");
+
+                if (_options.GenerateXmlComments)
+                {
+                    sb.AppendLine("    /// <summary>");
+                    sb.AppendLine($"    /// Data contract for {type.Name}");
+                    sb.AppendLine("    /// </summary>");
+                }
+
+                sb.AppendLine($"    public class {type.Name}");
+                sb.AppendLine("    {");
+
+                // Add static properties for ElementFormQualified and NamespacePrefix
+                sb.AppendLine("        /// <summary>");
+                sb.AppendLine("        /// Gets a value indicating whether elements of this type should be qualified with a namespace.");
+                sb.AppendLine("        /// </summary>");
+                sb.AppendLine($"        public static bool ElementFormQualified {{ get; }} = {(type.ElementFormQualified ? "true" : "false")};");
+                sb.AppendLine();
+
+                sb.AppendLine("        /// <summary>");
+                sb.AppendLine("        /// Gets the namespace prefix to use for qualified elements.");
+                sb.AppendLine("        /// </summary>");
+                sb.AppendLine($"        public static string? NamespacePrefix {{ get; }} = {(string.IsNullOrEmpty(type.NamespacePrefix) ? "null" : $"\"{type.NamespacePrefix}\"")};");
+                sb.AppendLine();
+
+                // Generate the rest of the class using the template
                 string classCode = ClientTemplate.GenerateDataContract(_options, type.Name, properties);
+
+                // Extract just the properties part from the generated code
+                int startIndex = classCode.IndexOf("{", classCode.IndexOf("public class"));
+                startIndex = classCode.IndexOf("{", startIndex + 1) + 1;
+                int endIndex = classCode.LastIndexOf("}");
+                string propertiesCode = classCode.Substring(startIndex, endIndex - startIndex);
+
+                // Add the properties to our class
+                sb.Append(propertiesCode);
+
+                // Close class and namespace
+                sb.AppendLine("    }");
+                sb.AppendLine("}");
+
                 string filePath = Path.Combine(dataContractsDir, $"{type.Name}.cs");
-                await File.WriteAllTextAsync(filePath, classCode);
+                await File.WriteAllTextAsync(filePath, sb.ToString());
             }
             else if (type.Kind == WsdlTypeKind.Enum)
             {
