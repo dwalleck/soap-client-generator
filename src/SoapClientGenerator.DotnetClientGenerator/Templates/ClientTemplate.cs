@@ -405,9 +405,8 @@ public static class ClientTemplate
                 propertyName = "@" + propertyName;
             }
 
-            // Make non-required properties nullable if they're value types
-            if (!isRequired && !propertyType.EndsWith("?") && !propertyType.StartsWith("List<") &&
-                !propertyType.Equals("string") && !propertyType.Equals("object") && !propertyType.EndsWith("[]"))
+            // Make non-required properties nullable
+            if (!isRequired && !propertyType.EndsWith("?") && !propertyType.StartsWith("List<") && !propertyType.EndsWith("[]"))
             {
                 propertyType = $"{propertyType}?";
             }
