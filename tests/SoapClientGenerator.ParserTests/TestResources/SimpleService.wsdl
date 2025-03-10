@@ -1,0 +1,97 @@
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+               xmlns:tns="http://example.org/SimpleService/" 
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               xmlns:s="http://www.w3.org/2001/XMLSchema" 
+               xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" 
+               xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" 
+               xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" 
+               xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" 
+               xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+               targetNamespace="http://example.org/SimpleService/" 
+               xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://example.org/SimpleService/">
+      <!-- Status Enum -->
+      <s:simpleType name="StatusEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Active"/>
+          <s:enumeration value="Inactive"/>
+          <s:enumeration value="Pending"/>
+        </s:restriction>
+      </s:simpleType>
+      
+      <!-- Data Type -->
+      <s:complexType name="DataType">
+        <s:sequence>
+          <s:element name="Id" type="s:int"/>
+          <s:element name="Name" type="s:string"/>
+          <s:element name="Status" type="tns:StatusEnum"/>
+        </s:sequence>
+      </s:complexType>
+      
+      <!-- Data Array -->
+      <s:complexType name="DataArray">
+        <s:sequence>
+          <s:element name="item" type="tns:DataType" minOccurs="0" maxOccurs="unbounded"/>
+        </s:sequence>
+      </s:complexType>
+      
+      <!-- GetData Request -->
+      <s:element name="GetDataRequest">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="value" type="s:int"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      
+      <!-- GetData Response -->
+      <s:element name="GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="result" type="tns:DataType"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+
+  <!-- Message definitions -->
+  <wsdl:message name="GetDataInput">
+    <wsdl:part name="parameters" element="tns:GetDataRequest"/>
+  </wsdl:message>
+  <wsdl:message name="GetDataOutput">
+    <wsdl:part name="parameters" element="tns:GetDataResponse"/>
+  </wsdl:message>
+
+  <!-- Port Type -->
+  <wsdl:portType name="SimpleServicePortType">
+    <wsdl:operation name="GetData">
+      <wsdl:documentation>Retrieves data for the specified ID</wsdl:documentation>
+      <wsdl:input message="tns:GetDataInput"/>
+      <wsdl:output message="tns:GetDataOutput"/>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <!-- Binding -->
+  <wsdl:binding name="SimpleServiceSoapBinding" type="tns:SimpleServicePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetData">
+      <soap:operation soapAction="http://example.org/SimpleService/GetData"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <!-- Service -->
+  <wsdl:service name="SimpleService">
+    <wsdl:port name="SimpleServicePort" binding="tns:SimpleServiceSoapBinding">
+      <soap:address location="http://example.org/SimpleService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

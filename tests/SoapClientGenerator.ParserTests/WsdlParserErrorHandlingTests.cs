@@ -35,7 +35,7 @@ public class WsdlParserErrorHandlingTests
     public void Parse_NonWsdlXml_ReturnsEmptyDefinition()
     {
         // Arrange
-        var wsdlContent = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+        var wsdlContent = @"
 <root>
   <element>This is not a WSDL document</element>
 </root>";
@@ -56,8 +56,7 @@ public class WsdlParserErrorHandlingTests
     public void Parse_WsdlWithoutTypes_ReturnsDefinitionWithoutTypes()
     {
         // Arrange
-        var wsdlContent = @"<?xml version=""1.0"" encoding=""UTF-8""?>
-<definitions xmlns=""http://schemas.xmlsoap.org/wsdl/""
+        var wsdlContent = @"<definitions xmlns=""http://schemas.xmlsoap.org/wsdl/""
              xmlns:soap=""http://schemas.xmlsoap.org/wsdl/soap/""
              xmlns:tns=""http://example.org/NoTypesService/""
              xmlns:xsd=""http://www.w3.org/2001/XMLSchema""
@@ -100,7 +99,7 @@ public class WsdlParserErrorHandlingTests
     public void Parse_WsdlWithoutOperations_ReturnsDefinitionWithoutOperations()
     {
         // Arrange
-        var wsdlContent = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+        var wsdlContent = @"
 <definitions xmlns=""http://schemas.xmlsoap.org/wsdl/""
              xmlns:soap=""http://schemas.xmlsoap.org/wsdl/soap/""
              xmlns:tns=""http://example.org/NoOperationsService/""
@@ -150,7 +149,7 @@ public class WsdlParserErrorHandlingTests
     public void Parse_WsdlWithMalformedTypes_HandlesGracefully()
     {
         // Arrange
-        var wsdlContent = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+        var wsdlContent = @"
 <definitions xmlns=""http://schemas.xmlsoap.org/wsdl/""
              xmlns:soap=""http://schemas.xmlsoap.org/wsdl/soap/""
              xmlns:tns=""http://example.org/MalformedTypesService/""
@@ -210,7 +209,7 @@ public class WsdlParserErrorHandlingTests
     public void Parse_WsdlWithMalformedOperations_HandlesGracefully()
     {
         // Arrange
-        var wsdlContent = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+        var wsdlContent = @"
 <definitions xmlns=""http://schemas.xmlsoap.org/wsdl/""
              xmlns:soap=""http://schemas.xmlsoap.org/wsdl/soap/""
              xmlns:tns=""http://example.org/MalformedOperationsService/""
@@ -284,7 +283,7 @@ public class WsdlParserErrorHandlingTests
     public void Parse_WsdlWithMissingNamespaces_HandlesGracefully()
     {
         // Arrange
-        var wsdlContent = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+        var wsdlContent = @"
 <definitions xmlns=""http://schemas.xmlsoap.org/wsdl/""
              targetNamespace=""http://example.org/MissingNamespacesService/"">
     <!-- No namespace declarations for soap, tns, xsd -->

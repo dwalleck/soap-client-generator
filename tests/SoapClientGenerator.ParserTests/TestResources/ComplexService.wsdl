@@ -1,0 +1,259 @@
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+               xmlns:tns="http://example.org/ComplexService/" 
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               xmlns:s="http://www.w3.org/2001/XMLSchema" 
+               xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" 
+               xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" 
+               xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" 
+               xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" 
+               xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+               targetNamespace="http://example.org/ComplexService/" 
+               xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://example.org/ComplexService/">
+      <!-- Enumerations -->
+      <s:simpleType name="StatusEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Active"/>
+          <s:enumeration value="Inactive"/>
+          <s:enumeration value="Pending"/>
+          <s:enumeration value="Suspended"/>
+        </s:restriction>
+      </s:simpleType>
+      
+      <s:simpleType name="RoleEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Admin"/>
+          <s:enumeration value="User"/>
+          <s:enumeration value="Guest"/>
+          <s:enumeration value="Moderator"/>
+        </s:restriction>
+      </s:simpleType>
+      
+      <!-- Complex Types -->
+      <s:complexType name="AddressType">
+        <s:sequence>
+          <s:element name="Street" type="s:string"/>
+          <s:element name="City" type="s:string"/>
+          <s:element name="State" type="s:string"/>
+          <s:element name="ZipCode" type="s:string"/>
+          <s:element name="Country" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      
+      <s:complexType name="UserType">
+        <s:sequence>
+          <s:element name="id" type="s:int"/>
+          <s:element name="username" type="s:string" minOccurs="1" maxOccurs="1"/>
+          <s:element name="firstName" type="s:string" minOccurs="0" maxOccurs="1"/>
+          <s:element name="lastName" type="s:string" minOccurs="0" maxOccurs="1"/>
+          <s:element name="email" type="s:string"/>
+          <s:element name="status" type="tns:StatusEnum"/>
+          <s:element name="roles" type="tns:RoleEnum" minOccurs="0" maxOccurs="unbounded"/>
+          <s:element name="address" type="tns:AddressType"/>
+        </s:sequence>
+      </s:complexType>
+      
+      <!-- Array Types -->
+      <s:complexType name="UserArray">
+        <s:sequence>
+          <s:element name="item" type="tns:UserType" minOccurs="0" maxOccurs="unbounded"/>
+        </s:sequence>
+      </s:complexType>
+      
+      <!-- Auth Header -->
+      <s:complexType name="SWBCAuthHeader">
+        <s:sequence>
+          <s:element name="username" type="s:string" minOccurs="1" maxOccurs="1"/>
+          <s:element name="password" type="s:string" minOccurs="1" maxOccurs="1"/>
+          <s:element name="apiKey" type="s:string" minOccurs="0" maxOccurs="1"/>
+        </s:sequence>
+      </s:complexType>
+      
+      <s:element name="SWBCAuthHeader" type="tns:SWBCAuthHeader"/>
+      
+      <!-- Request and Response Elements -->
+      <s:element name="GetUserRequest">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="userId" type="s:int"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      
+      <s:element name="GetUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="user" type="tns:UserType"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      
+      <s:element name="CreateUserRequest">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="user" type="tns:UserType"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      
+      <s:element name="CreateUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="userId" type="s:int"/>
+            <s:element name="success" type="s:boolean"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      
+      <s:element name="UpdateUserRequest">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="user" type="tns:UserType"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      
+      <s:element name="UpdateUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="success" type="s:boolean"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      
+      <s:element name="DeleteUserRequest">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="userId" type="s:int"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      
+      <s:element name="DeleteUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="success" type="s:boolean"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+
+  <!-- Message definitions -->
+  <wsdl:message name="GetUserInput">
+    <wsdl:part name="parameters" element="tns:GetUserRequest"/>
+  </wsdl:message>
+  <wsdl:message name="GetUserOutput">
+    <wsdl:part name="parameters" element="tns:GetUserResponse"/>
+  </wsdl:message>
+  
+  <wsdl:message name="CreateUserInput">
+    <wsdl:part name="parameters" element="tns:CreateUserRequest"/>
+  </wsdl:message>
+  <wsdl:message name="CreateUserOutput">
+    <wsdl:part name="parameters" element="tns:CreateUserResponse"/>
+  </wsdl:message>
+  
+  <wsdl:message name="UpdateUserInput">
+    <wsdl:part name="parameters" element="tns:UpdateUserRequest"/>
+  </wsdl:message>
+  <wsdl:message name="UpdateUserOutput">
+    <wsdl:part name="parameters" element="tns:UpdateUserResponse"/>
+  </wsdl:message>
+  
+  <wsdl:message name="DeleteUserInput">
+    <wsdl:part name="parameters" element="tns:DeleteUserRequest"/>
+  </wsdl:message>
+  <wsdl:message name="DeleteUserOutput">
+    <wsdl:part name="parameters" element="tns:DeleteUserResponse"/>
+  </wsdl:message>
+  
+  <wsdl:message name="AuthHeader">
+    <wsdl:part name="AuthHeader" element="tns:SWBCAuthHeader"/>
+  </wsdl:message>
+
+  <!-- Port Type -->
+  <wsdl:portType name="UserServicePortType">
+    <wsdl:operation name="GetUser">
+      <wsdl:documentation>Retrieves user information by ID</wsdl:documentation>
+      <wsdl:input message="tns:GetUserInput"/>
+      <wsdl:output message="tns:GetUserOutput"/>
+    </wsdl:operation>
+    
+    <wsdl:operation name="CreateUser">
+      <wsdl:documentation>Creates a new user</wsdl:documentation>
+      <wsdl:input message="tns:CreateUserInput"/>
+      <wsdl:output message="tns:CreateUserOutput"/>
+    </wsdl:operation>
+    
+    <wsdl:operation name="UpdateUser">
+      <wsdl:documentation>Updates an existing user</wsdl:documentation>
+      <wsdl:input message="tns:UpdateUserInput"/>
+      <wsdl:output message="tns:UpdateUserOutput"/>
+    </wsdl:operation>
+    
+    <wsdl:operation name="DeleteUser">
+      <wsdl:documentation>Deletes a user by ID</wsdl:documentation>
+      <wsdl:input message="tns:DeleteUserInput"/>
+      <wsdl:output message="tns:DeleteUserOutput"/>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <!-- Binding -->
+  <wsdl:binding name="UserServiceSoapBinding" type="tns:UserServicePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    
+    <wsdl:operation name="GetUser">
+      <soap:operation soapAction="http://example.org/ComplexService/GetUser"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:AuthHeader" part="AuthHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    
+    <wsdl:operation name="CreateUser">
+      <soap:operation soapAction="http://example.org/ComplexService/CreateUser"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:AuthHeader" part="AuthHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    
+    <wsdl:operation name="UpdateUser">
+      <soap:operation soapAction="http://example.org/ComplexService/UpdateUser"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:AuthHeader" part="AuthHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    
+    <wsdl:operation name="DeleteUser">
+      <soap:operation soapAction="http://example.org/ComplexService/DeleteUser"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:AuthHeader" part="AuthHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <!-- Service -->
+  <wsdl:service name="UserService">
+    <wsdl:port name="UserServicePort" binding="tns:UserServiceSoapBinding">
+      <soap:address location="http://example.org/UserService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,179 @@
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+               xmlns:tns="http://example.org/OverloadedService/" 
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               xmlns:s="http://www.w3.org/2001/XMLSchema" 
+               xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" 
+               xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" 
+               xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" 
+               xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" 
+               xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+               targetNamespace="http://example.org/OverloadedService/" 
+               xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://example.org/OverloadedService/">
+      <!-- Category Enum -->
+      <s:simpleType name="CategoryEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Electronics"/>
+          <s:enumeration value="Clothing"/>
+          <s:enumeration value="Books"/>
+          <s:enumeration value="Home"/>
+        </s:restriction>
+      </s:simpleType>
+      
+      <!-- GetProductById Request -->
+      <s:element name="GetProductByIdRequest">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="id" type="s:int"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      
+      <!-- GetProductByCode Request -->
+      <s:element name="GetProductByCodeRequest">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="code" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      
+      <!-- GetProductByName Request -->
+      <s:element name="GetProductByNameRequest">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="name" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      
+      <!-- Common response for all GetProduct operations -->
+      <s:element name="GetProductByIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="product" type="tns:ProductType"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      
+      <s:element name="GetProductByCodeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="product" type="tns:ProductType"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      
+      <s:element name="GetProductByNameResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="product" type="tns:ProductType"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      
+      <!-- Product Type -->
+      <s:complexType name="ProductType">
+        <s:sequence>
+          <s:element name="Id" type="s:int"/>
+          <s:element name="Code" type="s:string"/>
+          <s:element name="Name" type="s:string"/>
+          <s:element name="Description" type="s:string"/>
+          <s:element name="Price" type="s:decimal"/>
+          <s:element name="Category" type="tns:CategoryEnum"/>
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+
+  <!-- Message definitions -->
+  <wsdl:message name="GetProductByIdInput">
+    <wsdl:part name="parameters" element="tns:GetProductByIdRequest"/>
+  </wsdl:message>
+  
+  <wsdl:message name="GetProductByIdOutput">
+    <wsdl:part name="parameters" element="tns:GetProductByIdResponse"/>
+  </wsdl:message>
+  
+  <wsdl:message name="GetProductByCodeInput">
+    <wsdl:part name="parameters" element="tns:GetProductByCodeRequest"/>
+  </wsdl:message>
+  
+  <wsdl:message name="GetProductByCodeOutput">
+    <wsdl:part name="parameters" element="tns:GetProductByCodeResponse"/>
+  </wsdl:message>
+  
+  <wsdl:message name="GetProductByNameInput">
+    <wsdl:part name="parameters" element="tns:GetProductByNameRequest"/>
+  </wsdl:message>
+  
+  <wsdl:message name="GetProductByNameOutput">
+    <wsdl:part name="parameters" element="tns:GetProductByNameResponse"/>
+  </wsdl:message>
+
+  <!-- Port Type -->
+  <wsdl:portType name="ProductServicePortType">
+    <!-- Overloaded GetProduct operations -->
+    <wsdl:operation name="GetProductById">
+      <wsdl:documentation>Get product by its unique identifier</wsdl:documentation>
+      <wsdl:input message="tns:GetProductByIdInput"/>
+      <wsdl:output message="tns:GetProductByIdOutput"/>
+    </wsdl:operation>
+    
+    <wsdl:operation name="GetProductByCode">
+      <wsdl:documentation>Get product by its product code</wsdl:documentation>
+      <wsdl:input message="tns:GetProductByCodeInput"/>
+      <wsdl:output message="tns:GetProductByCodeOutput"/>
+    </wsdl:operation>
+    
+    <wsdl:operation name="GetProductByName">
+      <wsdl:documentation>Get product by its name</wsdl:documentation>
+      <wsdl:input message="tns:GetProductByNameInput"/>
+      <wsdl:output message="tns:GetProductByNameOutput"/>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <!-- Binding -->
+  <wsdl:binding name="ProductServiceSoapBinding" type="tns:ProductServicePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    
+    <wsdl:operation name="GetProductById">
+      <soap:operation soapAction="http://example.org/OverloadedService/GetProductById"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    
+    <wsdl:operation name="GetProductByCode">
+      <soap:operation soapAction="http://example.org/OverloadedService/GetProductByCode"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    
+    <wsdl:operation name="GetProductByName">
+      <soap:operation soapAction="http://example.org/OverloadedService/GetProductByName"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <!-- Service -->
+  <wsdl:service name="ProductService">
+    <wsdl:port name="ProductServicePort" binding="tns:ProductServiceSoapBinding">
+      <soap:address location="http://example.org/ProductService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
