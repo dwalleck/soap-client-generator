@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using SoapClientGenerator.Parser.Models;
 
-namespace SoapClientGenerator.Generator.Templates;
+namespace SoapClientGenerator.DotnetClientGenerator.Templates;
 
 /// <summary>
 /// Template for generating SOAP client code
@@ -112,7 +112,7 @@ public static class ClientTemplate
                 sb.AppendLine("                var namespaces = new XmlSerializerNamespaces();");
 
                 // Find the namespace prefix for the target namespace
-                string prefix = "tns"; // Default prefix if not found
+                var prefix = "tns"; // Default prefix if not found
                 foreach (var ns in namespaces)
                 {
                     if (ns.Value == targetNamespace)
@@ -184,12 +184,12 @@ public static class ClientTemplate
         foreach (var operation in operations)
         {
             // Use the operation name to determine the request and response types
-            string operationName = operation.Name;
-            string requestType = $"{operationName}";
-            string responseType = $"{operationName}Response";
+            var operationName = operation.Name;
+            var requestType = $"{operationName}";
+            var responseType = $"{operationName}Response";
 
             // Check if this operation requires auth
-            bool requiresAuth = operation.AuthHeader != null;
+            var requiresAuth = operation.AuthHeader != null;
 
             if (options.GenerateXmlComments)
             {
@@ -395,9 +395,9 @@ public static class ClientTemplate
         // Add properties
         foreach (var property in properties)
         {
-            string propertyType = property.Value.Type;
-            bool isRequired = property.Value.IsRequired;
-            string propertyName = property.Key;
+            var propertyType = property.Value.Type;
+            var isRequired = property.Value.IsRequired;
+            var propertyName = property.Key;
 
             // Check if property name is a C# keyword
             if (IsCSharpKeyword(propertyName))
@@ -502,7 +502,7 @@ public static class ClientTemplate
 
         // Add values
         var valuesList = new List<string>(values);
-        for (int i = 0; i < valuesList.Count; i++)
+        for (var i = 0; i < valuesList.Count; i++)
         {
             var value = valuesList[i];
             if (options.GenerateXmlComments)

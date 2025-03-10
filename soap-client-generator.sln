@@ -7,13 +7,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoapClientGenerator.Cli", "src\SoapClientGenerator.Cli\SoapClientGenerator.Cli.csproj", "{1EBA1F9D-391B-4B2E-A0D7-A9E6F95C32CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoapClientGenerator.Generator", "src\SoapClientGenerator.Generator\SoapClientGenerator.Generator.csproj", "{8126508E-459A-4CF9-A0F3-44EC8B677365}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoapClientGenerator.Parser", "src\SoapClientGenerator.Parser\SoapClientGenerator.Parser.csproj", "{CB3D73F0-6A52-4AB0-904C-761B8DE4FBDA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoapClientGenerator.ParserTests", "tests\SoapClientGenerator.ParserTests\SoapClientGenerator.ParserTests.csproj", "{7CA4F149-B7B9-4E36-AF9D-5AF4FEBB9B91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoapClientGenerator.DotnetClientGenerator", "src\SoapClientGenerator.DotnetClientGenerator\SoapClientGenerator.DotnetClientGenerator.csproj", "{FF919B6C-CD47-491A-B559-85C2C650D196}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,18 +37,6 @@ Global
 		{1EBA1F9D-391B-4B2E-A0D7-A9E6F95C32CE}.Release|x64.Build.0 = Release|Any CPU
 		{1EBA1F9D-391B-4B2E-A0D7-A9E6F95C32CE}.Release|x86.ActiveCfg = Release|Any CPU
 		{1EBA1F9D-391B-4B2E-A0D7-A9E6F95C32CE}.Release|x86.Build.0 = Release|Any CPU
-		{8126508E-459A-4CF9-A0F3-44EC8B677365}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8126508E-459A-4CF9-A0F3-44EC8B677365}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8126508E-459A-4CF9-A0F3-44EC8B677365}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{8126508E-459A-4CF9-A0F3-44EC8B677365}.Debug|x64.Build.0 = Debug|Any CPU
-		{8126508E-459A-4CF9-A0F3-44EC8B677365}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{8126508E-459A-4CF9-A0F3-44EC8B677365}.Debug|x86.Build.0 = Debug|Any CPU
-		{8126508E-459A-4CF9-A0F3-44EC8B677365}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8126508E-459A-4CF9-A0F3-44EC8B677365}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8126508E-459A-4CF9-A0F3-44EC8B677365}.Release|x64.ActiveCfg = Release|Any CPU
-		{8126508E-459A-4CF9-A0F3-44EC8B677365}.Release|x64.Build.0 = Release|Any CPU
-		{8126508E-459A-4CF9-A0F3-44EC8B677365}.Release|x86.ActiveCfg = Release|Any CPU
-		{8126508E-459A-4CF9-A0F3-44EC8B677365}.Release|x86.Build.0 = Release|Any CPU
 		{CB3D73F0-6A52-4AB0-904C-761B8DE4FBDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CB3D73F0-6A52-4AB0-904C-761B8DE4FBDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB3D73F0-6A52-4AB0-904C-761B8DE4FBDA}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -73,14 +61,26 @@ Global
 		{7CA4F149-B7B9-4E36-AF9D-5AF4FEBB9B91}.Release|x64.Build.0 = Release|Any CPU
 		{7CA4F149-B7B9-4E36-AF9D-5AF4FEBB9B91}.Release|x86.ActiveCfg = Release|Any CPU
 		{7CA4F149-B7B9-4E36-AF9D-5AF4FEBB9B91}.Release|x86.Build.0 = Release|Any CPU
+		{FF919B6C-CD47-491A-B559-85C2C650D196}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF919B6C-CD47-491A-B559-85C2C650D196}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF919B6C-CD47-491A-B559-85C2C650D196}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FF919B6C-CD47-491A-B559-85C2C650D196}.Debug|x64.Build.0 = Debug|Any CPU
+		{FF919B6C-CD47-491A-B559-85C2C650D196}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FF919B6C-CD47-491A-B559-85C2C650D196}.Debug|x86.Build.0 = Debug|Any CPU
+		{FF919B6C-CD47-491A-B559-85C2C650D196}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF919B6C-CD47-491A-B559-85C2C650D196}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF919B6C-CD47-491A-B559-85C2C650D196}.Release|x64.ActiveCfg = Release|Any CPU
+		{FF919B6C-CD47-491A-B559-85C2C650D196}.Release|x64.Build.0 = Release|Any CPU
+		{FF919B6C-CD47-491A-B559-85C2C650D196}.Release|x86.ActiveCfg = Release|Any CPU
+		{FF919B6C-CD47-491A-B559-85C2C650D196}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1EBA1F9D-391B-4B2E-A0D7-A9E6F95C32CE} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
-		{8126508E-459A-4CF9-A0F3-44EC8B677365} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{CB3D73F0-6A52-4AB0-904C-761B8DE4FBDA} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{7CA4F149-B7B9-4E36-AF9D-5AF4FEBB9B91} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{FF919B6C-CD47-491A-B559-85C2C650D196} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 EndGlobal

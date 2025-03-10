@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
-using SoapClientGenerator.Generator.Templates;
+using SoapClientGenerator.DotnetClientGenerator.Templates;
 using SoapClientGenerator.Parser;
 using SoapClientGenerator.Parser.Models;
 
-namespace SoapClientGenerator.Generator;
+namespace SoapClientGenerator.DotnetClientGenerator;
 
 /// <summary>
 /// Main class for generating SOAP clients from WSDL files

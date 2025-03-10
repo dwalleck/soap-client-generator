@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using SoapClientGenerator.Generator;
-using SoapClientGenerator.Generator.Templates;
+using SoapClientGenerator.DotnetClientGenerator;
+using SoapClientGenerator.DotnetClientGenerator.Templates;
 using SoapClientGenerator.Parser.Models;
 using Xunit;
 

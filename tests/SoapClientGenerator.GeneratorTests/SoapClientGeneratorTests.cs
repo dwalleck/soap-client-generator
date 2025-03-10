@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Generator = SoapClientGenerator.Generator;
+using Generator = SoapClientGenerator.DotnetClientGenerator;
 using Xunit;
 
 namespace SoapClientGenerator.GeneratorTests;

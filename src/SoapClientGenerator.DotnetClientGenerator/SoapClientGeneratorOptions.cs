@@ -1,6 +1,6 @@
 using System;
 
-namespace SoapClientGenerator.Generator;
+namespace SoapClientGenerator.DotnetClientGenerator;
 
 /// <summary>
 /// Configuration options for the SOAP client generator
